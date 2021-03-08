@@ -1,0 +1,17 @@
+{
+  "name": "bgm-types",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node build/build.js"
+  },
+  "keywords": ["Bangumi", "Types", "BangumiApi"],
+  "author": "Kagurazaka Mizuki",
+  "license": "MIT",
+  "devDependencies": {
+    "axios": "^0.21.1",
+    "js-yaml": "^4.0.0",
+    "openapi-typescript": "^3.0.4"
+  }
+}
