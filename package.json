@@ -1,14 +1,24 @@
 {
   "name": "bgm-types",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "",
+  "types": "index.ts",
   "scripts": {
     "build": "node build/build.js"
   },
-  "keywords": ["Bangumi", "Types", "BangumiApi"],
+  "files": [
+    "index.ts",
+    "types"
+  ],
+  "keywords": [
+    "Bangumi",
+    "Types",
+    "BangumiApi"
+  ],
   "author": "Kagurazaka Mizuki",
   "license": "MIT",
+  "repository": "github:cokemine/bgm-types",
   "devDependencies": {
     "axios": "^0.21.1",
     "js-yaml": "^4.0.0",
