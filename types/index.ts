@@ -42,25 +42,26 @@ export interface paths {
         /** 获取用户收藏列表，默认为在看 */
         200: {
           content: {
-            "application/json": {
+            "application/json": ({
               /** 番剧标题 */
-              name?: string;
+              name: string;
               /** 章节 ID */
-              subject_id?: number;
+              subject_id: number;
               /** 完成话数 */
-              ep_status?: number;
+              ep_status: number;
               /** 完成卷数（书籍） */
-              vol_status?: { [key: string]: any };
+              vol_status: { [key: string]: any };
               /** 上次更新时间 */
-              lasttouch?: number;
-              subject?: components["schemas"]["SubjectBase"] & {
-                /** 话数 */
-                eps?: number;
-                /** 话数 */
-                eps_count?: number;
-                collection?: components["schemas"]["SubjectCollection"];
-              };
-            }[];
+              lasttouch: number;
+              subject: components["schemas"]["SubjectBase"] &
+                ({
+                  /** 话数 */
+                  eps: number;
+                  /** 话数 */
+                  eps_count: number;
+                  collection: components["schemas"]["SubjectCollection"];
+                } & { [key: string]: any }) & { [key: string]: any };
+            } & { [key: string]: any })[];
           };
         };
       };
@@ -86,22 +87,22 @@ export interface paths {
         /** 获取用户指定类型的收藏概览，固定返回最近更新的收藏，不支持翻页 */
         200: {
           content: {
-            "application/json": {
-              type?: components["schemas"]["SubjectType"];
-              name?: components["schemas"]["SubjectTypeName"];
+            "application/json": ({
+              type: components["schemas"]["SubjectType"];
+              name: components["schemas"]["SubjectTypeName"];
               /** 条目类型中文名 */
-              name_cn?: string;
+              name_cn: string;
               /** 收藏列表 */
-              collects?: {
-                status?: components["schemas"]["CollectionStatus"];
-                count?: number;
-                list?: {
+              collects: ({
+                status: components["schemas"]["CollectionStatus"];
+                count: number;
+                list: ({
                   /** 条目 ID */
-                  subject_id?: string;
-                  subject?: components["schemas"]["SubjectBase"];
-                }[];
-              }[];
-            }[];
+                  subject_id: string;
+                  subject: components["schemas"]["SubjectBase"];
+                } & { [key: string]: any })[];
+              } & { [key: string]: any })[];
+            } & { [key: string]: any })[];
           };
         };
       };
@@ -123,17 +124,17 @@ export interface paths {
         /** 获取用户所有收藏信息 */
         200: {
           content: {
-            "application/json": {
-              type?: components["schemas"]["SubjectType"];
-              name?: components["schemas"]["SubjectTypeName"];
+            "application/json": ({
+              type: components["schemas"]["SubjectType"];
+              name: components["schemas"]["SubjectTypeName"];
               /** 条目类型中文名 */
-              name_cn?: string;
+              name_cn: string;
               /** 收藏列表 */
-              collects?: {
-                status?: components["schemas"]["CollectionStatus"];
-                count?: number;
-              }[];
-            }[];
+              collects: ({
+                status: components["schemas"]["CollectionStatus"];
+                count: number;
+              } & { [key: string]: any })[];
+            } & { [key: string]: any })[];
           };
         };
       };
@@ -155,21 +156,21 @@ export interface paths {
         /** 返回用户收视进度 */
         200: {
           content: {
-            "application/json": {
+            "application/json": ({
               /** 条目 ID */
-              subject_id?: number;
+              subject_id: number;
               /** 章节列表 */
-              eps?: {
+              eps: ({
                 /** 章节 ID */
-                id?: number;
-                status?: {
-                  id?: components["schemas"]["EpStatusId"];
-                  css_name?: string;
-                  url_name?: components["schemas"]["EpStatusType"];
-                  cn_name?: components["schemas"]["EpStatusName"];
-                };
-              }[];
-            }[];
+                id: number;
+                status: {
+                  id: components["schemas"]["EpStatusId"];
+                  css_name: string;
+                  url_name: components["schemas"]["EpStatusType"];
+                  cn_name: components["schemas"]["EpStatusName"];
+                } & { [key: string]: any };
+              } & { [key: string]: any })[];
+            } & { [key: string]: any })[];
           };
         };
         /** 未授权 */
@@ -197,10 +198,11 @@ export interface paths {
         /** 根据 responseGroup 参数，返回以下三个模型 <br> [SubjectSmall](#model-SubjectSmall) <br> [SubjectMedium](#model-SubjectMedium) <br> [SubjectLarge](#model-SubjectLarge) */
         200: {
           content: {
-            "application/json":
+            "application/json": (
               | components["schemas"]["SubjectSmall"]
               | components["schemas"]["SubjectMedium"]
-              | components["schemas"]["SubjectLarge"];
+              | components["schemas"]["SubjectLarge"]
+              ) & { [key: string]: any };
           };
         };
       };
@@ -218,10 +220,11 @@ export interface paths {
         /** 章节数据 */
         200: {
           content: {
-            "application/json": components["schemas"]["SubjectBase"] & {
-              /** 章节列表 */
-              eps?: components["schemas"]["Episode"][];
-            };
+            "application/json": components["schemas"]["SubjectBase"] &
+              ({
+                /** 章节列表 */
+                eps: components["schemas"]["Episode"][];
+              } & { [key: string]: any }) & { [key: string]: any };
           };
         };
       };
@@ -233,15 +236,15 @@ export interface paths {
         /** 每日放送 */
         200: {
           content: {
-            "application/json": {
-              weekday?: {
-                en?: string;
-                cn?: string;
-                ja?: string;
-                id?: number;
-              };
-              items?: components["schemas"]["SubjectSmall"][];
-            }[];
+            "application/json": ({
+              weekday: {
+                en: string;
+                cn: string;
+                ja: string;
+                id: number;
+              } & { [key: string]: any };
+              items: components["schemas"]["SubjectSmall"][];
+            } & { [key: string]: any })[];
           };
         };
       };
@@ -271,10 +274,10 @@ export interface paths {
           content: {
             "application/json": {
               /** 总条数 */
-              results?: number;
+              results: number;
               /** 结果列表 */
-              list?: components["schemas"]["SubjectSmall"][];
-            };
+              list: components["schemas"]["SubjectSmall"][];
+            } & { [key: string]: any };
           };
         };
       };
@@ -434,10 +437,10 @@ export interface components {
     CollectionStatusName: "想做" | "做过" | "在做" | "搁置" | "抛弃";
     /** 收藏状态 <br> 1 = wish = 想做 <br> 2 = collect = 做过 <br> 3 = do = 在做 <br> 4 = on_hold = 搁置 <br> 5 = dropped = 抛弃 */
     CollectionStatus: {
-      id?: components["schemas"]["CollectionStatusId"];
-      type?: components["schemas"]["CollectionStatusType"];
-      name?: components["schemas"]["CollectionStatusName"];
-    };
+      id: components["schemas"]["CollectionStatusId"];
+      type: components["schemas"]["CollectionStatusType"];
+      name: components["schemas"]["CollectionStatusName"];
+    } & { [key: string]: any };
     /** 章节状态 ID */
     EpStatusId: 2 | 1 | 3;
     /** 章节状态类型 */
@@ -446,139 +449,142 @@ export interface components {
     EpStatusName: "看过" | "想看" | "抛弃" | "撤销";
     /** 章节状态 <br> 2 = watched = 看过 <br> 1 = queue = 想看 <br> 3 = drop = 抛弃 <br> ? = remove = 撤销 */
     EpStatus: {
-      id?: components["schemas"]["EpStatusId"];
-      type?: components["schemas"]["EpStatusType"];
-      name?: components["schemas"]["EpStatusName"];
-    };
+      id: components["schemas"]["EpStatusId"];
+      type: components["schemas"]["EpStatusType"];
+      name: components["schemas"]["EpStatusName"];
+    } & { [key: string]: any };
     /** 返回数据大小 */
     ResponseGroup: "small" | "medium" | "large";
     /** 人物（基础模型） */
     MonoBase: {
       /** 人物 ID */
-      id?: number;
+      id: number;
       /** 人物地址 */
-      url?: string;
+      url: string;
       /** 姓名 */
-      name?: string;
+      name: string;
       /** 肖像 */
-      images?: {
-        large?: string;
-        medium?: string;
-        small?: string;
-        grid?: string;
-      };
-    };
+      images: {
+        large: string;
+        medium: string;
+        small: string;
+        grid: string;
+      } & { [key: string]: any };
+    } & { [key: string]: any };
     /** 人物 */
-    Mono: components["schemas"]["MonoBase"] & {
-      /** 简体中文名 */
-      name_cn?: string;
-      /** 回复数量 */
-      comment?: number;
-      /** 收藏人数 */
-      collects?: number;
-    };
+    Mono: components["schemas"]["MonoBase"] &
+      ({
+        /** 简体中文名 */
+        name_cn: string;
+        /** 回复数量 */
+        comment: number;
+        /** 收藏人数 */
+        collects: number;
+      } & { [key: string]: any }) & { [key: string]: any };
     /** 人物信息 */
     MonoInfo: {
       /** 生日 */
-      birth?: string;
+      birth: string;
       /** 身高 */
-      height?: string;
+      height: string;
       /** 性别 */
-      gender?: string;
+      gender: string;
       /** 别名（另外添加出来的 key 为 0 开始的数字） */
-      alias?: {
+      alias: {
         /** 日文名 */
-        jp?: string;
+        jp: string;
         /** 纯假名 */
-        kana?: string;
+        kana: string;
         /** 昵称 */
-        nick?: string;
+        nick: string;
         /** 罗马字 */
-        romaji?: string;
+        romaji: string;
         /** 第二中文名 */
-        zh?: string;
-      };
+        zh: string;
+      } & { [key: string]: any };
       /** 引用来源 */
-      source?: string | string[];
+      source: (string | string[]) & { [key: string]: any };
       /** 简体中文名 */
-      name_cn?: string;
+      name_cn: string;
       /** 声优 */
-      cv?: string;
-    };
+      cv: string;
+    } & { [key: string]: any };
     /** 现实人物 */
-    Person: components["schemas"]["Mono"] & {
-      info?: components["schemas"]["MonoInfo"];
-    };
+    Person: components["schemas"]["Mono"] &
+      ({
+        info: components["schemas"]["MonoInfo"];
+      } & { [key: string]: any }) & { [key: string]: any };
     /** 虚拟角色 */
-    Character: components["schemas"]["Mono"] & {
-      info?: components["schemas"]["MonoInfo"];
-      /** 声优列表 */
-      actors?: components["schemas"]["MonoBase"][];
-    };
+    Character: components["schemas"]["Mono"] &
+      ({
+        info: components["schemas"]["MonoInfo"];
+        /** 声优列表 */
+        actors: components["schemas"]["MonoBase"][];
+      } & { [key: string]: any }) & { [key: string]: any };
     /** 章节类型 <br> 0 = 本篇 <br> 1 = 特别篇 <br> 2 = OP <br> 3 = ED <br> 4 = 预告/宣传/广告 <br> 5 = MAD <br> 6 = 其他 */
     EpisodeType: 0 | 1 | 2 | 3 | 4 | 5 | 6;
     /** 章节信息 */
     Episode: {
       /** 章节 ID */
-      id?: number;
+      id: number;
       /** 章节地址 */
-      url?: string;
-      type?: components["schemas"]["EpisodeType"];
+      url: string;
+      type: components["schemas"]["EpisodeType"];
       /** 集数 */
-      sort?: number;
+      sort: number;
       /** 标题 */
-      name?: string;
+      name: string;
       /** 简体中文标题 */
-      name_cn?: string;
+      name_cn: string;
       /** 时长 */
-      duration?: string;
+      duration: string;
       /** 放送日期 */
-      airdate?: string;
+      airdate: string;
       /** 回复数量 */
-      comment?: number;
+      comment: number;
       /** 简介 */
-      desc?: string;
+      desc: string;
       /** 放送状态 <br> Air = 已放送 <br> Today = 正在放送 <br> NA = 未放送 */
-      status?: "Air" | "Today" | "NA";
-    };
+      status: "Air" | "Today" | "NA";
+    } & { [key: string]: any };
     /** 讨论版 */
     Topic: {
       /** ID */
-      id?: number;
+      id: number;
       /** 地址 */
-      url?: string;
+      url: string;
       /** 标题 */
-      title?: string;
+      title: string;
       /** 所属对象（条目） ID */
-      main_id?: number;
+      main_id: number;
       /** 发布时间 */
-      timestamp?: number;
+      timestamp: number;
       /** 最后回复时间 */
-      lastpost?: number;
+      lastpost: number;
       /** 回复数 */
-      replies?: number;
-      user?: components["schemas"]["User"];
-    };
+      replies: number;
+      user: components["schemas"]["User"];
+    } & { [key: string]: any };
     /** 日志 */
     Blog: {
       /** ID */
-      id?: number;
+      id: number;
       /** 地址 */
-      url?: string;
+      url: string;
       /** 标题 */
-      title?: string;
+      title: string;
       /** 概览 */
-      summary?: string;
+      summary: string;
       /** 图片 */
-      image?: string;
+      image: string;
       /** 回复数 */
-      replies?: number;
+      replies: number;
       /** 发布时间 */
-      timestamp?: number;
+      timestamp: number;
       /** 发布时间 */
-      dateline?: string;
-      user?: components["schemas"]["User"];
-    };
+      dateline: string;
+      user: components["schemas"]["User"];
+    } & { [key: string]: any };
     /** 条目类型 <br> 1 = book <br> 2 = anime <br> 3 = music <br> 4 = game <br> 6 = real */
     SubjectType: 1 | 2 | 3 | 4 | 6;
     /** 条目类型名称 <br> book <br> anime <br> music <br> game <br> real */
@@ -586,122 +592,128 @@ export interface components {
     /** 收藏人数 */
     SubjectCollection: {
       /** 想做 */
-      wish?: number;
+      wish: number;
       /** 做过 */
-      collect?: number;
+      collect: number;
       /** 在做 */
-      doing?: number;
+      doing: number;
       /** 搁置 */
-      on_hold?: number;
+      on_hold: number;
       /** 抛弃 */
-      dropped?: number;
-    };
+      dropped: number;
+    } & { [key: string]: any };
     Subject: {
       /** 条目 ID */
-      id?: number;
+      id: number;
       /** 条目地址 */
-      url?: string;
-      type?: components["schemas"]["SubjectType"];
+      url: string;
+      type: components["schemas"]["SubjectType"];
       /** 条目名称 */
-      name?: string;
-    };
-    SubjectBase: components["schemas"]["Subject"] & {
-      /** 条目中文名称 */
-      name_cn?: string;
-      /** 剧情简介 */
-      summary?: string;
-      /** 放送开始日期 */
-      air_date?: string;
-      /** 放送星期 */
-      air_weekday?: number;
-      /** 封面 */
-      images?: {
-        large?: string;
-        common?: string;
-        medium?: string;
-        small?: string;
-        grid?: string;
-      };
-    };
-    SubjectSmall: components["schemas"]["SubjectBase"] & {
-      /** 话数 */
-      eps?: number;
-      /** 话数 */
-      eps_count?: number;
-      /** 评分 */
-      rating?: {
-        /** 总评分人数 */
-        total?: number;
-        /** 各分值评分人数 */
-        count?: {
-          "1"?: number;
-          "2"?: number;
-          "3"?: number;
-          "4"?: number;
-          "5"?: number;
-          "6"?: number;
-          "7"?: number;
-          "8"?: number;
-          "9"?: number;
-          "10"?: number;
-        };
+      name: string;
+    } & { [key: string]: any };
+    SubjectBase: components["schemas"]["Subject"] &
+      ({
+        /** 条目中文名称 */
+        name_cn: string;
+        /** 剧情简介 */
+        summary: string;
+        /** 放送开始日期 */
+        air_date: string;
+        /** 放送星期 */
+        air_weekday: number;
+        /** 封面 */
+        images: {
+          large: string;
+          common: string;
+          medium: string;
+          small: string;
+          grid: string;
+        } & { [key: string]: any };
+      } & { [key: string]: any }) & { [key: string]: any };
+    SubjectSmall: components["schemas"]["SubjectBase"] &
+      ({
+        /** 话数 */
+        eps: number;
+        /** 话数 */
+        eps_count: number;
         /** 评分 */
-        score?: number;
-      };
-      /** 排名 */
-      rank?: number;
-      collection?: components["schemas"]["SubjectCollection"];
-    };
-    SubjectMedium: components["schemas"]["SubjectSmall"] & {
-      /** 角色信息 */
-      crt?: (components["schemas"]["Character"] & {
-        /** 角色类型 */
-        role_name?: string;
-      })[];
-      /** 制作人员信息 */
-      staff?: (components["schemas"]["Person"] & {
-        /** 人物类型 */
-        role_name?: string;
-        /** 职位 */
-        jobs?: string[];
-      })[];
-    };
-    SubjectLarge: components["schemas"]["SubjectMedium"] & {
-      /** 章节列表 */
-      eps?: components["schemas"]["Episode"][];
-      /** 讨论版 */
-      topic?: components["schemas"]["Topic"][];
-      /** 评论日志 */
-      blog?: components["schemas"]["Blog"][];
-    };
+        rating: {
+          /** 总评分人数 */
+          total: number;
+          /** 各分值评分人数 */
+          count: {
+            "1": number;
+            "2": number;
+            "3": number;
+            "4": number;
+            "5": number;
+            "6": number;
+            "7": number;
+            "8": number;
+            "9": number;
+            "10": number;
+          } & { [key: string]: any };
+          /** 评分 */
+          score: number;
+        } & { [key: string]: any };
+        /** 排名 */
+        rank: number;
+        collection: components["schemas"]["SubjectCollection"];
+      } & { [key: string]: any }) & { [key: string]: any };
+    SubjectMedium: components["schemas"]["SubjectSmall"] &
+      ({
+        /** 角色信息 */
+        crt: (components["schemas"]["Character"] &
+          ({
+            /** 角色类型 */
+            role_name: string;
+          } & { [key: string]: any }) & { [key: string]: any })[];
+        /** 制作人员信息 */
+        staff: (components["schemas"]["Person"] &
+          ({
+            /** 人物类型 */
+            role_name: string;
+            /** 职位 */
+            jobs: string[];
+          } & { [key: string]: any }) & { [key: string]: any })[];
+      } & { [key: string]: any }) & { [key: string]: any };
+    SubjectLarge: components["schemas"]["SubjectMedium"] &
+      ({
+        /** 章节列表 */
+        eps: components["schemas"]["Episode"][];
+        /** 讨论版 */
+        topic: components["schemas"]["Topic"][];
+        /** 评论日志 */
+        blog: components["schemas"]["Blog"][];
+      } & { [key: string]: any }) & { [key: string]: any };
     /** 用户信息 */
     User: {
       /** 用户 id */
-      id?: number;
+      id: number;
       /** 用户主页地址 */
-      url?: string;
+      url: string;
       /** 用户名 */
-      username?: string;
+      username: string;
       /** 昵称 */
-      nickname?: string;
+      nickname: string;
       /** 头像地址 */
-      avatar?: {
-        large?: string;
-        medium?: string;
-        small?: string;
-      };
+      avatar: {
+        large: string;
+        medium: string;
+        small: string;
+      } & { [key: string]: any };
       /** 签名 */
-      sign?: string;
-      usergroup?: components["schemas"]["UserGroup"];
-    };
+      sign: string;
+      usergroup: components["schemas"]["UserGroup"];
+    } & { [key: string]: any };
     /** 用户组 <br> 1 = 管理员 <br> 2 = Bangumi 管理猿 <br> 3 = 天窗管理猿 <br> 4 = 禁言用户 <br> 5 = 禁止访问用户 <br> 8 = 人物管理猿 <br> 9 = 维基条目管理猿 <br> 10 = 用户 <br> 11 = 维基人 */
     UserGroup: 1 | 2 | 3 | 4 | 5 | 8 | 9 | 10 | 11;
     /** 响应状态（HTTP 状态码都为 200） */
     StatusCode: {
       /** 当前请求的地址 */
-      request?: string;
+      request: string;
       /** 状态码 <br> 200 OK <br> 202 Accepted <br> 304 Not Modified <br> 30401 Not Modified: Collection already exists <br> 400 Bad Request <br> 40001 Error: Nothing found with that ID <br> 401 Unauthorized <br> 40101 Error: Auth failed over 5 times <br> 40102 Error: Username is not an Email address <br> 405 Method Not Allowed <br> 404 Not Found */
-      code?:
+      code:
         | 200
         | 202
         | 304
@@ -714,29 +726,29 @@ export interface components {
         | 405
         | 404;
       /** 状态信息 */
-      error?: string;
-    };
+      error: string;
+    } & { [key: string]: any };
   };
   responses: {
     /** 条目收藏信息 */
     Collection: {
       content: {
         "application/json": {
-          status?: components["schemas"]["CollectionStatus"];
+          status: components["schemas"]["CollectionStatus"];
           /** 评分 */
-          rating?: number;
+          rating: number;
           /** 评论 */
-          comment?: string;
+          comment: string;
           /** 收藏隐私 */
-          private?: 0 | 1;
+          private: 0 | 1;
           /** 标签 */
-          tag?: string[];
+          tag: string[];
           /** 完成话数 */
-          ep_status?: number;
+          ep_status: number;
           /** 上次更新时间 */
-          lasttouch?: number;
-          user?: components["schemas"]["User"];
-        };
+          lasttouch: number;
+          user: components["schemas"]["User"];
+        } & { [key: string]: any };
       };
     };
   };

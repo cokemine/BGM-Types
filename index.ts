@@ -1,4 +1,4 @@
-import { paths } from './types/api';
+import { paths } from './types';
 
 export namespace BGMUser {
   export type Information = paths["/user/{username}"]["get"]["responses"]["200"]["content"]["application/json"];
