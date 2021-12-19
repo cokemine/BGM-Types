@@ -1,8 +1,8 @@
 {
   "name": "bgm-types",
-  "version": "1.0.2",
-  "description": "",
-  "main": "",
+  "version": "1.0.3",
+  "description": "Bangumi Api Types",
+  "main": "index.ts",
   "types": "index.ts",
   "scripts": {
     "build": "node build/build.js"
