@@ -202,7 +202,7 @@ export interface paths {
               | components["schemas"]["SubjectSmall"]
               | components["schemas"]["SubjectMedium"]
               | components["schemas"]["SubjectLarge"]
-              ) & { [key: string]: any };
+            ) & { [key: string]: any };
           };
         };
       };
@@ -402,8 +402,8 @@ export interface paths {
           action: "create" | "update";
         };
         query: {
-          /** 章节状态，参考 [EpStatusType](#model-EpStatusType) */
-          status: components["schemas"]["EpStatusType"];
+          /** 收藏状态，参考 [CollectionStatusType](#model-CollectionStatusType) */
+          status: components["schemas"]["CollectionStatusType"];
           /** 简评 */
           comment?: string;
           /** 标签 <br> 以半角空格分割 */

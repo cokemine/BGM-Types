@@ -1,15 +1,15 @@
-const axios = require('axios');
-const swaggerToTS = require("openapi-typescript").default;
-const yaml = require('js-yaml');
 const fs = require('fs');
+const axios = require('axios');
+const swaggerToTS = require('openapi-typescript').default;
+const yaml = require('js-yaml');
 
+// patch
 function dfs(obj) {
-  if (obj.hasOwnProperty('properties') && !obj.hasOwnProperty('required')) {
-    const arr = [];
-    for (const prop of Object.keys(obj['properties'])) {
-      arr.push(prop)
-    }
-    obj.required = arr;
+  if (
+    Object.prototype.hasOwnProperty.call(obj, 'properties')
+    && !Object.prototype.hasOwnProperty.call(obj, 'required')
+  ) {
+    obj.required = Object.keys(obj.properties);
   }
   for (const k of Object.keys(obj)) {
     if (typeof obj[k] === 'object') dfs(obj[k]);
