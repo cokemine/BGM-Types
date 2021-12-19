@@ -4,6 +4,26 @@
  */
 
 export interface paths {
+  "/v0/persons": {
+    get: operations["get_persons_v0_persons_get"];
+  };
+  "/v0/persons/{person_id}": {
+    /** cache with 60s */
+    get: operations["get_person_v0_persons__person_id__get"];
+  };
+  "/v0/persons/{person_id}/subjects": {
+    get: operations["get_person_subjects_v0_persons__person_id__subjects_get"];
+  };
+  "/v0/characters": {
+    get: operations["get_characters_v0_characters_get"];
+  };
+  "/v0/characters/{character_id}": {
+    /** cache with 60s */
+    get: operations["get_character_detail_v0_characters__character_id__get"];
+  };
+  "/v0/characters/{character_id}/subjects": {
+    get: operations["get_person_subjects_v0_characters__character_id__subjects_get"];
+  };
   "/user/{username}": {
     get: {
       parameters: {
@@ -426,6 +446,144 @@ export interface paths {
 
 export interface components {
   schemas: {
+    /** An enumeration. */
+    BloodType: 1 | 2 | 3 | 4;
+    Character: {
+      id: number;
+      name: string;
+      /** 角色，机体，组织... */
+      type: components["schemas"]["PersonType"];
+      /** object with some size of images, this object maybe `null` */
+      images?: components["schemas"]["PersonImages"];
+      locked: boolean;
+      short_summary: string;
+    };
+    CharacterDetail: {
+      id: number;
+      name: string;
+      /** 角色，机体，组织... */
+      type: components["schemas"]["PersonType"];
+      /** object with some size of images, this object maybe `null` */
+      images?: components["schemas"]["PersonImages"];
+      locked: boolean;
+      summary: string;
+      /** server parsed infobox, a map from key to string or tuple\nnull if server infobox is not valid */
+      infobox?: { [key: string]: unknown }[];
+      /** parsed from wiki, maybe null */
+      gender?: string;
+      /** parsed from wiki, maybe null, `1, 2, 3, 4` for `A, B, CD, O` */
+      blood_type?: components["schemas"]["BloodType"];
+      /** parsed from wiki, maybe `null` */
+      birth_year?: number;
+      /** parsed from wiki, maybe `null` */
+      birth_mon?: number;
+      /** parsed from wiki, maybe `null` */
+      birth_day?: number;
+      stat: components["schemas"]["Stat"];
+    };
+    ErrorDetail: {
+      title: string;
+      description: string;
+      /** can be anything */
+      detail: unknown;
+    };
+    HTTPValidationError: {
+      detail: components["schemas"]["ValidationError"][];
+    };
+    PagedCharacter: {
+      total: number;
+      limit: number;
+      offset: number;
+      data: components["schemas"]["Character"][];
+    };
+    PagedPerson: {
+      total: number;
+      limit: number;
+      offset: number;
+      data: components["schemas"]["Person"][];
+    };
+    Person: {
+      id: number;
+      name: string;
+      /** `1`, `2`, `3` 表示 `个人`, `公司`, `组合` */
+      type: components["schemas"]["PersonType"];
+      career: components["schemas"]["PersonCareer"][];
+      /** object with some size of images, this object maybe `null` */
+      images?: components["schemas"]["PersonImages"];
+      locked: boolean;
+      short_summary: string;
+      /** use `images` instead */
+      img?: string;
+    };
+    /** An enumeration. */
+    PersonCareer:
+      | "producer"
+      | "mangaka"
+      | "artist"
+      | "seiyu"
+      | "writer"
+      | "illustrator"
+      | "actor";
+    PersonDetail: {
+      id: number;
+      name: string;
+      /** `1`, `2`, `3` 表示 `个人`, `公司`, `组合` */
+      type: components["schemas"]["PersonType"];
+      career: components["schemas"]["PersonCareer"][];
+      /** object with some size of images, this object maybe `null` */
+      images?: components["schemas"]["PersonImages"];
+      locked: boolean;
+      summary: string;
+      /** currently it's latest user comment time, it will be replaced by wiki modified date in the future */
+      last_modified: string;
+      /** server parsed infobox, a map from key to string or tuple\nnull if server infobox is not valid */
+      infobox?: { [key: string]: unknown }[];
+      /** parsed from wiki, maybe null */
+      gender?: string;
+      /** parsed from wiki, maybe null, `1, 2, 3, 4` for `A, B, CD, O` */
+      blood_type?: components["schemas"]["BloodType"];
+      /** parsed from wiki, maybe `null` */
+      birth_year?: number;
+      /** parsed from wiki, maybe `null` */
+      birth_mon?: number;
+      /** parsed from wiki, maybe `null` */
+      birth_day?: number;
+      stat: components["schemas"]["Stat"];
+      /** use `images` instead */
+      img?: string;
+    };
+    PersonImages: {
+      large: string;
+      medium: string;
+      small: string;
+      grid: string;
+    };
+    /** An enumeration. */
+    PersonType: 1 | 2 | 3;
+    Stat: {
+      comments: number;
+      collects: number;
+    };
+    SubjectInfo: {
+      subject_id: number;
+      staff: string;
+      subject_name?: string;
+      subject_name_cn: string;
+      subject_image?: string;
+    };
+    ValidationError: {
+      loc: string[];
+      msg: string;
+      type: string;
+    };
+    /** An enumeration. */
+    pol__api__v0__character__Order: 1 | -1;
+    /** An enumeration. */
+    pol__api__v0__character__Sort: "id" | "name";
+    /** An enumeration. */
+    pol__api__v0__person__Order: 1 | -1;
+    /** An enumeration. */
+    pol__api__v0__person__Sort: "id" | "name" | "update";
     /** 收藏状态 ID */
     CollectionStatusId: 1 | 2 | 3 | 4 | 5;
     /** 收藏状态类型 */
@@ -506,11 +664,11 @@ export interface components {
       cv: string;
     };
     /** 现实人物 */
-    Person: components["schemas"]["Mono"] & {
+    Person1: components["schemas"]["Mono"] & {
       info: components["schemas"]["MonoInfo"];
     };
     /** 虚拟角色 */
-    Character: components["schemas"]["Mono"] & {
+    Character1: components["schemas"]["Mono"] & {
       info: components["schemas"]["MonoInfo"];
       /** 声优列表 */
       actors: components["schemas"]["MonoBase"][];
@@ -654,12 +812,12 @@ export interface components {
     };
     SubjectMedium: components["schemas"]["SubjectSmall"] & {
       /** 角色信息 */
-      crt: (components["schemas"]["Character"] & {
+      crt: (components["schemas"]["Character1"] & {
         /** 角色类型 */
         role_name: string;
       })[];
       /** 制作人员信息 */
-      staff: (components["schemas"]["Person"] & {
+      staff: (components["schemas"]["Person1"] & {
         /** 人物类型 */
         role_name: string;
         /** 职位 */
@@ -756,6 +914,170 @@ export interface components {
   };
 }
 
-export interface operations {}
+export interface operations {
+  get_persons_v0_persons_get: {
+    parameters: {
+      query: {
+        name?: string;
+        /** `1`为个人，`2`为公司，`3`为组合 */
+        type?: components["schemas"]["PersonType"];
+        career?: components["schemas"]["PersonCareer"][];
+        sort?: components["schemas"]["pol__api__v0__person__Sort"];
+        order?: components["schemas"]["pol__api__v0__person__Order"];
+        limit?: number;
+        offset?: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedPerson"];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  /** cache with 60s */
+  get_person_v0_persons__person_id__get: {
+    parameters: {
+      path: {
+        person_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PersonDetail"];
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_person_subjects_v0_persons__person_id__subjects_get: {
+    parameters: {
+      path: {
+        person_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SubjectInfo"][];
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_characters_v0_characters_get: {
+    parameters: {
+      query: {
+        name?: string;
+        sort?: components["schemas"]["pol__api__v0__character__Sort"];
+        order?: components["schemas"]["pol__api__v0__character__Order"];
+        limit?: number;
+        offset?: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedCharacter"];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  /** cache with 60s */
+  get_character_detail_v0_characters__character_id__get: {
+    parameters: {
+      path: {
+        character_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CharacterDetail"];
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_person_subjects_v0_characters__character_id__subjects_get: {
+    parameters: {
+      path: {
+        character_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SubjectInfo"][];
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+}
 
 export interface external {}

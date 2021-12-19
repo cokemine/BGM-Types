@@ -4,18 +4,20 @@ Bangumi.tv 官方 API 的 TypeScript 声明文件
 
 API: https://github.com/bangumi/api
 
-您目前访问的是旧版本 API, 建议等新版本 API 稳定后尽快迁移至新版本。
+您目前访问的是新版本 API, 新版本 API 还在建设中，可能会有不稳定的变动。
+
+旧版本 API 类型注解 请见 v1 分支。
 
 ## How To Use
 
 ```shell
-npm install bgm-types@1 -D
+npm install bgm-types -D
 ```
 
-该声明文件暴露了 5 个命名空间，分别对应官方 API 5 种类型的接口，可以按需引入。
+该声明文件暴露了 7 个命名空间，分别对应官方 API 7 种类型的接口，可以按需引入。
 
 ```javascript
-import { BGMUser, BGMSubject, BGMSearch, BGMProgress, BGMCollection } from 'bgm-types';
+import { BGMPerson, BGMCharacter, BGMUser, BGMSubject, BGMSearch, BGMProgress, BGMCollection } from 'bgm-types';
 ```
 
 示例

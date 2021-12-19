@@ -1,7 +1,6 @@
 const fs = require('fs');
 const axios = require('axios');
 const swaggerToTS = require('openapi-typescript').default;
-const yaml = require('js-yaml');
 
 // patch
 function dfs(obj) {
@@ -17,9 +16,9 @@ function dfs(obj) {
 }
 
 axios
-  .get('https://raw.githubusercontent.com/bangumi/api/master/open-api/api.yml')
+  .get('https://bangumi.github.io/api/dist.json')
   .then(res => {
-    const doc = yaml.load(res.data);
+    const doc = res.data;
     dfs(doc);
     return swaggerToTS(doc);
   })
