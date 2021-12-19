@@ -16,8 +16,11 @@ function dfs(obj) {
   }
 }
 
-axios.get('https://raw.githubusercontent.com/bangumi/api/master/open-api/api.yml').then(res => {
-  const doc = yaml.load(res.data);
-  dfs(doc);
-  fs.writeFileSync(require('path').resolve(__dirname, '../types/index.ts'), swaggerToTS(doc));
-});
+axios
+  .get('https://raw.githubusercontent.com/bangumi/api/master/open-api/api.yml')
+  .then(res => {
+    const doc = yaml.load(res.data);
+    dfs(doc);
+    return swaggerToTS(doc);
+  })
+  .then(data => fs.writeFileSync(require('path').resolve(__dirname, '../types/index.ts'), data));
