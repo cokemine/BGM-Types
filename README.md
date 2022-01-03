@@ -14,10 +14,10 @@ API: https://github.com/bangumi/api
 npm install bgm-types -D
 ```
 
-该声明文件暴露了 7 个命名空间，分别对应官方 API 7 种类型的接口，可以按需引入。
+该声明文件暴露了 8 个命名空间，分别对应官方 API 8 种类型的接口，可以按需引入。
 
 ```javascript
-import { BGMPerson, BGMCharacter, BGMUser, BGMSubject, BGMSearch, BGMProgress, BGMCollection } from 'bgm-types';
+import { BGMPerson, BGMCharacter, BGMEpisode, BGMUser, BGMSubject, BGMSearch, BGMProgress, BGMCollection } from 'bgm-types';
 ```
 
 示例

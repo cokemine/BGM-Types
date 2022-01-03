@@ -1,9 +1,10 @@
 {
   "name": "bgm-types",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Bangumi Api Types",
   "main": "index.ts",
   "types": "index.ts",
+  "type": "module",
   "scripts": {
     "build": "node build/build.js"
   },
@@ -22,6 +23,6 @@
   "devDependencies": {
     "axios": "^0.21.1",
     "js-yaml": "^4.0.0",
-    "openapi-typescript": "^4.4.0"
+    "openapi-typescript": "^5.0.0"
   }
 }

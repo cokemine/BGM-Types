@@ -1,6 +1,10 @@
-const fs = require('fs');
-const axios = require('axios');
-const swaggerToTS = require('openapi-typescript').default;
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import axios from 'axios';
+import swaggerToTS from 'openapi-typescript';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // patch
 function dfs(obj) {
@@ -22,4 +26,4 @@ axios
     dfs(doc);
     return swaggerToTS(doc);
   })
-  .then(data => fs.writeFileSync(require('path').resolve(__dirname, '../types/index.ts'), data));
+  .then(data => fs.writeFileSync(path.resolve(__dirname, '../types/index.ts'), data));
