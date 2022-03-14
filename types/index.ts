@@ -4,49 +4,6 @@
  */
 
 export interface paths {
-  "/v0/subjects/{subject_id}": {
-    /** cache with 300s */
-    get: operations["get_subject_v0_subjects__subject_id__get"];
-  };
-  "/v0/subjects/{subject_id}/persons": {
-    get: operations["get_subject_persons_v0_subjects__subject_id__persons_get"];
-  };
-  "/v0/subjects/{subject_id}/characters": {
-    get: operations["get_subject_characters_v0_subjects__subject_id__characters_get"];
-  };
-  "/v0/subjects/{subject_id}/subjects": {
-    get: operations["get_subject_relations_v0_subjects__subject_id__subjects_get"];
-  };
-  "/v0/episodes": {
-    get: operations["get_episodes_v0_episodes_get"];
-  };
-  "/v0/episodes/{episode_id}": {
-    get: operations["get_episode_v0_episodes__episode_id__get"];
-  };
-  "/v0/characters/{character_id}": {
-    /** cache with 60s */
-    get: operations["get_character_detail_v0_characters__character_id__get"];
-  };
-  "/v0/characters/{character_id}/subjects": {
-    get: operations["get_person_subjects_v0_characters__character_id__subjects_get"];
-  };
-  "/v0/characters/{character_id}/persons": {
-    get: operations["get_character_persons_v0_characters__character_id__persons_get"];
-  };
-  "/v0/persons/{person_id}": {
-    /** cache with 60s */
-    get: operations["get_person_v0_persons__person_id__get"];
-  };
-  "/v0/persons/{person_id}/subjects": {
-    get: operations["get_person_subjects_v0_persons__person_id__subjects_get"];
-  };
-  "/v0/persons/{person_id}/characters": {
-    get: operations["get_person_characters_v0_persons__person_id__characters_get"];
-  };
-  "/v0/me": {
-    /** 返回当前 Access Token 对应的用户信息 */
-    get: operations["get_subject_v0_me_get"];
-  };
   "/user/{username}": {
     get: {
       parameters: {
@@ -237,52 +194,6 @@ export interface paths {
       };
     };
   };
-  "/subject/{subject_id}": {
-    get: {
-      parameters: {
-        path: {
-          /** 条目 ID */
-          subject_id: components["parameters"]["subject_id"];
-        };
-        query: {
-          /** 返回数据大小，参考 [ResponseGroup](#model-ResponseGroup) <br> 默认为 small */
-          responseGroup?: components["parameters"]["responseGroup"];
-        };
-      };
-      responses: {
-        /** 根据 responseGroup 参数，返回以下三个模型 <br> [SubjectSmall](#model-SubjectSmall) <br> [SubjectMedium](#model-SubjectMedium) <br> [SubjectLarge](#model-SubjectLarge) */
-        200: {
-          content: {
-            "application/json":
-              | components["schemas"]["SubjectSmall"]
-              | components["schemas"]["SubjectMedium"]
-              | components["schemas"]["SubjectLarge"];
-          };
-        };
-      };
-    };
-  };
-  "/subject/{subject_id}/ep": {
-    get: {
-      parameters: {
-        path: {
-          /** 条目 ID */
-          subject_id: components["parameters"]["subject_id"];
-        };
-      };
-      responses: {
-        /** 章节数据 */
-        200: {
-          content: {
-            "application/json": components["schemas"]["SubjectBase"] & {
-              /** @description 章节列表 */
-              eps: components["schemas"]["Episode1"][];
-            };
-          };
-        };
-      };
-    };
-  };
   "/calendar": {
     get: {
       responses: {
@@ -450,6 +361,7 @@ export interface paths {
     };
   };
   "/collection/{subject_id}/{action}": {
+    /** 管理收藏。Content-type必须为multipart/form-data或application/x-www-form-urlencoded，参数都得放在body里。 */
     post: {
       parameters: {
         path: {
@@ -457,18 +369,6 @@ export interface paths {
           subject_id: components["parameters"]["subject_id"];
           /** 收藏动作 <br> create = 添加收藏 <br> update = 更新收藏 <br> 可以统一使用 `update`，系统会自动判断需要新建还是更新收藏 */
           action: "create" | "update";
-        };
-        query: {
-          /** 收藏状态，参考 [CollectionStatusType](#model-CollectionStatusType) */
-          status: components["schemas"]["CollectionStatusType"];
-          /** 简评 */
-          comment?: string;
-          /** 标签 <br> 以半角空格分割 */
-          tags?: string;
-          /** 评分 <br> 1-10 */
-          rating?: number;
-          /** 收藏隐私 <br> 0 = 公开 <br> 1 = 私密 */
-          privacy?: 0 | 1;
         };
       };
       responses: {
@@ -480,533 +380,106 @@ export interface paths {
           };
         };
       };
+      /** 必须是content-type对应的形式，不能采用Raw */
+      requestBody: {
+        content: {
+          "application/x-www-form-urlencoded": {
+            /** @description 收藏状态，参考 [CollectionStatusType](#model-CollectionStatusType) */
+            status: components["schemas"]["CollectionStatusType"];
+            /** @description 简评 */
+            comment?: string;
+            /** @description 标签 <br> 以半角空格分割 */
+            tags?: string;
+            /** @description 评分 <br> 1-10 <br> 不填默认重置为未评分 */
+            rating?: number;
+            /** @description 收藏隐私 <br> 0 = 公开 <br> 1 = 私密 <br> 不填默认为0 */
+            privacy?: number;
+          };
+        };
+      };
     };
+  };
+  "/v0/subjects/{subject_id}": {
+    /** cache with 300s */
+    get: operations["get_subject_by_id_v0_subjects__subject_id__get"];
+  };
+  "/v0/subjects/{subject_id}/persons": {
+    get: operations["get_subject_persons_v0_subjects__subject_id__persons_get"];
+  };
+  "/v0/subjects/{subject_id}/characters": {
+    get: operations["get_subject_characters_v0_subjects__subject_id__characters_get"];
+  };
+  "/v0/subjects/{subject_id}/subjects": {
+    get: operations["get_subject_relations_v0_subjects__subject_id__subjects_get"];
+  };
+  "/v0/episodes": {
+    get: operations["get_episodes_v0_episodes_get"];
+  };
+  "/v0/episodes/{episode_id}": {
+    get: operations["get_episode_v0_episodes__episode_id__get"];
+  };
+  "/v0/characters/{character_id}": {
+    /** cache with 60s */
+    get: operations["get_character_detail_v0_characters__character_id__get"];
+  };
+  "/v0/characters/{character_id}/subjects": {
+    get: operations["get_person_subjects_v0_characters__character_id__subjects_get"];
+  };
+  "/v0/characters/{character_id}/persons": {
+    get: operations["get_character_persons_v0_characters__character_id__persons_get"];
+  };
+  "/v0/persons/{person_id}": {
+    /** cache with 60s */
+    get: operations["get_person_v0_persons__person_id__get"];
+  };
+  "/v0/persons/{person_id}/subjects": {
+    get: operations["get_person_subjects_v0_persons__person_id__subjects_get"];
+  };
+  "/v0/persons/{person_id}/characters": {
+    get: operations["get_person_characters_v0_persons__person_id__characters_get"];
+  };
+  "/v0/me": {
+    /** 返回当前 Access Token 对应的用户信息 */
+    get: operations["get_user_v0_me_get"];
+  };
+  "/v0/users/{username}/collections": {
+    /** 获取对应用户的收藏，查看私有收藏需要access token。 */
+    get: operations["get_user_collection_v0_users__username__collections_get"];
+  };
+  "/v0/revisions/persons": {
+    get: operations["get_person_revisions_v0_revisions_persons_get"];
+  };
+  "/v0/revisions/persons/{revision_id}": {
+    get: operations["get_person_revision_v0_revisions_persons__revision_id__get"];
+  };
+  "/v0/revisions/characters": {
+    get: operations["get_character_revisions_v0_revisions_characters_get"];
+  };
+  "/v0/revisions/characters/{revision_id}": {
+    get: operations["get_character_revision_v0_revisions_characters__revision_id__get"];
+  };
+  "/v0/revisions/subjects": {
+    get: operations["get_subject_revisions_v0_revisions_subjects_get"];
+  };
+  "/v0/revisions/subjects/{revision_id}": {
+    get: operations["get_subject_revision_v0_revisions_subjects__revision_id__get"];
+  };
+  "/v0/revisions/episodes": {
+    get: operations["get_episode_revisions_v0_revisions_episodes_get"];
+  };
+  "/v0/revisions/episodes/{revision_id}": {
+    get: operations["get_episode_revision_v0_revisions_episodes__revision_id__get"];
+  };
+  "/v0/indices/{index_id}": {
+    get: operations["get_index_by_id_v0_indices__index_id__get"];
+  };
+  "/v0/indices/{index_id}/subjects": {
+    get: operations["get_index_subjects_v0_indices__index_id__subjects_get"];
   };
 }
 
 export interface components {
   schemas: {
-    /** Avatar */
-    Avatar: {
-      /** Large */
-      large: string;
-      /** Medium */
-      medium: string;
-      /** Small */
-      small: string;
-    };
-    /**
-     * BloodType
-     * @description An enumeration.
-     */
-    BloodType: 1 | 2 | 3 | 4;
-    /** CharacterDetail */
-    CharacterDetail: {
-      /** Id */
-      id: number;
-      /** Name */
-      name: string;
-      /** @description 角色，机体，舰船，组织... */
-      type: components["schemas"]["CharacterType"];
-      /**
-       * Images
-       * @description object with some size of images, this object maybe `null`
-       */
-      images?: components["schemas"]["PersonImages"];
-      /** Summary */
-      summary: string;
-      /** Locked */
-      locked: boolean;
-      /**
-       * Infobox
-       * @description server parsed infobox, a map from key to string or tuple\nnull if server infobox is not valid
-       */
-      infobox?: { [key: string]: unknown }[];
-      /**
-       * Gender
-       * @description parsed from wiki, maybe null
-       */
-      gender?: string;
-      /** @description parsed from wiki, maybe null, `1, 2, 3, 4` for `A, B, CD, O` */
-      blood_type?: components["schemas"]["BloodType"];
-      /**
-       * Birth Year
-       * @description parsed from wiki, maybe `null`
-       */
-      birth_year?: number;
-      /**
-       * Birth Mon
-       * @description parsed from wiki, maybe `null`
-       */
-      birth_mon?: number;
-      /**
-       * Birth Day
-       * @description parsed from wiki, maybe `null`
-       */
-      birth_day?: number;
-      stat: components["schemas"]["Stat"];
-    };
-    /** CharacterPerson */
-    CharacterPerson: {
-      /** Id */
-      id: number;
-      /** Name */
-      name: string;
-      /** @description 角色，机体，舰船，组织... */
-      type: components["schemas"]["CharacterType"];
-      /**
-       * Images
-       * @description object with some size of images, this object maybe `null`
-       */
-      images?: components["schemas"]["PersonImages"];
-      /** Subject Id */
-      subject_id: number;
-      /** Subject Name */
-      subject_name: string;
-      /** Subject Name Cn */
-      subject_name_cn: string;
-    };
-    /**
-     * CharacterType
-     * @description An enumeration.
-     */
-    CharacterType: 1 | 2 | 3 | 4;
-    /** Collection */
-    Collection: {
-      /** Wish */
-      wish: number;
-      /** Collect */
-      collect: number;
-      /** Doing */
-      doing: number;
-      /** On Hold */
-      on_hold: number;
-      /** Dropped */
-      dropped: number;
-    };
-    /**
-     * EpType
-     * @description An enumeration.
-     */
-    EpType: 0 | 1 | 2 | 3;
-    /** Episode */
-    Episode: {
-      /** Id */
-      id: number;
-      /**
-       * Type
-       * @description `0` 本篇，`1` SP，`2` OP，`3` ED
-       */
-      type: number;
-      /** Name */
-      name: string;
-      /** Name Cn */
-      name_cn: string;
-      /**
-       * Sort
-       * @description 同类条目的排序和集数
-       */
-      sort: number;
-      /**
-       * Ep
-       * @description 条目内的集数, 从`1`开始。非本篇剧集的此字段无意义
-       */
-      ep?: number;
-      /** Airdate */
-      airdate: string;
-      /** Comment */
-      comment: number;
-      /** Duration */
-      duration: string;
-      /**
-       * Desc
-       * @description 简介
-       */
-      desc: string;
-      /**
-       * Disc
-       * @description 音乐曲目的碟片数
-       */
-      disc: number;
-    };
-    /** EpisodeDetail */
-    EpisodeDetail: {
-      /** Id */
-      id: number;
-      /**
-       * Type
-       * @description `0` 本篇，`1` SP，`2` OP，`3` ED
-       */
-      type: number;
-      /** Name */
-      name: string;
-      /** Name Cn */
-      name_cn: string;
-      /**
-       * Sort
-       * @description 同类条目的排序和集数
-       */
-      sort: number;
-      /**
-       * Ep
-       * @description 条目内的集数, 从`1`开始。非本篇剧集的此字段无意义
-       */
-      ep?: number;
-      /** Airdate */
-      airdate: string;
-      /** Comment */
-      comment: number;
-      /** Duration */
-      duration: string;
-      /**
-       * Desc
-       * @description 简介
-       */
-      desc: string;
-      /**
-       * Disc
-       * @description 音乐曲目的碟片数
-       */
-      disc: number;
-      /** Subject Id */
-      subject_id: number;
-    };
-    /** ErrorDetail */
-    ErrorDetail: {
-      /** Title */
-      title: string;
-      /** Description */
-      description: string;
-      /**
-       * Detail
-       * @description can be anything
-       */
-      detail: unknown;
-    };
-    /** HTTPValidationError */
-    HTTPValidationError: {
-      /** Detail */
-      detail: components["schemas"]["ValidationError"][];
-    };
-    /** Images */
-    Images: {
-      /** Large */
-      large: string;
-      /** Common */
-      common: string;
-      /** Medium */
-      medium: string;
-      /** Small */
-      small: string;
-      /** Grid */
-      grid: string;
-    };
-    /** Item */
-    Item: {
-      /** Key */
-      key: string;
-      /** Value */
-      value: Partial<string> &
-        Partial<
-          (Partial<components["schemas"]["KV"]> &
-            Partial<components["schemas"]["V"]>)[]
-        >;
-    };
-    /** KV */
-    KV: {
-      /** K */
-      k: string;
-      /** V */
-      v: string;
-    };
-    /** Me */
-    Me: {
-      /** Id */
-      id: number;
-      /** Url */
-      url: string;
-      /** Username */
-      username: string;
-      /** Nickname */
-      nickname: string;
-      user_group: components["schemas"]["UserGroup"];
-      avatar: components["schemas"]["Avatar"];
-      /** Sign */
-      sign: string;
-    };
-    /** Paged[Episode] */
-    Paged_Episode_: {
-      /** Total */
-      total: number;
-      /** Limit */
-      limit: number;
-      /** Offset */
-      offset: number;
-      /**
-       * Data
-       * @default
-       */
-      data: components["schemas"]["Episode"][];
-    };
-    /**
-     * PersonCareer
-     * @description An enumeration.
-     */
-    PersonCareer:
-      | "producer"
-      | "mangaka"
-      | "artist"
-      | "seiyu"
-      | "writer"
-      | "illustrator"
-      | "actor";
-    /** PersonCharacter */
-    PersonCharacter: {
-      /** Id */
-      id: number;
-      /** Name */
-      name: string;
-      /** @description 角色，机体，舰船，组织... */
-      type: components["schemas"]["CharacterType"];
-      /**
-       * Images
-       * @description object with some size of images, this object maybe `null`
-       */
-      images?: components["schemas"]["PersonImages"];
-      /** Subject Id */
-      subject_id: number;
-      /** Subject Name */
-      subject_name: string;
-      /** Subject Name Cn */
-      subject_name_cn: string;
-    };
-    /** PersonDetail */
-    PersonDetail: {
-      /** Id */
-      id: number;
-      /** Name */
-      name: string;
-      /** @description `1`, `2`, `3` 表示 `个人`, `公司`, `组合` */
-      type: components["schemas"]["PersonType"];
-      career: components["schemas"]["PersonCareer"][];
-      /**
-       * Images
-       * @description object with some size of images, this object maybe `null`
-       */
-      images?: components["schemas"]["PersonImages"];
-      /** Summary */
-      summary: string;
-      /** Locked */
-      locked: boolean;
-      /**
-       * Last Modified
-       * Format: date-time
-       * @description currently it's latest user comment time, it will be replaced by wiki modified date in the future
-       */
-      last_modified: string;
-      /**
-       * Infobox
-       * @description server parsed infobox, a map from key to string or tuple\nnull if server infobox is not valid
-       */
-      infobox?: { [key: string]: unknown }[];
-      /**
-       * Gender
-       * @description parsed from wiki, maybe null
-       */
-      gender?: string;
-      /** @description parsed from wiki, maybe null, `1, 2, 3, 4` for `A, B, CD, O` */
-      blood_type?: components["schemas"]["BloodType"];
-      /**
-       * Birth Year
-       * @description parsed from wiki, maybe `null`
-       */
-      birth_year?: number;
-      /**
-       * Birth Mon
-       * @description parsed from wiki, maybe `null`
-       */
-      birth_mon?: number;
-      /**
-       * Birth Day
-       * @description parsed from wiki, maybe `null`
-       */
-      birth_day?: number;
-      stat: components["schemas"]["Stat"];
-      /**
-       * Img
-       * @description use `images` instead
-       */
-      img?: string;
-    };
-    /** PersonImages */
-    PersonImages: {
-      /** Large */
-      large: string;
-      /** Medium */
-      medium: string;
-      /** Small */
-      small: string;
-      /** Grid */
-      grid: string;
-    };
-    /**
-     * PersonType
-     * @description An enumeration.
-     */
-    PersonType: 1 | 2 | 3;
-    /** Rating */
-    Rating: {
-      /** Rank */
-      rank: number;
-      /** Total */
-      total: number;
-      /** Count */
-      count: { [key: string]: number };
-      /** Score */
-      score: number;
-    };
-    /** RelatedCharacter */
-    RelatedCharacter: {
-      /** Id */
-      id: number;
-      /** Name */
-      name: string;
-      /** @description 角色，机体，舰船，组织... */
-      type: components["schemas"]["CharacterType"];
-      /**
-       * Images
-       * @description object with some size of images, this object maybe `null`
-       */
-      images?: components["schemas"]["PersonImages"];
-      /** Relation */
-      relation: string;
-    };
-    /** RelatedPerson */
-    RelatedPerson: {
-      /** Id */
-      id: number;
-      /** Name */
-      name: string;
-      /** @description `1`, `2`, `3` 表示 `个人`, `公司`, `组合` */
-      type: components["schemas"]["PersonType"];
-      career: components["schemas"]["PersonCareer"][];
-      /**
-       * Images
-       * @description object with some size of images, this object maybe `null`
-       */
-      images?: components["schemas"]["PersonImages"];
-      /** Relation */
-      relation: string;
-    };
-    /** Stat */
-    Stat: {
-      /** Comments */
-      comments: number;
-      /** Collects */
-      collects: number;
-    };
-    /** Subject */
-    Subject: {
-      /** Id */
-      id: number;
-      /** Type */
-      type: number;
-      /** Name */
-      name: string;
-      /** Name Cn */
-      name_cn: string;
-      /** Summary */
-      summary: string;
-      /** Nsfw */
-      nsfw: boolean;
-      /** Locked */
-      locked: boolean;
-      /**
-       * Date
-       * Format: date
-       */
-      date?: string;
-      /**
-       * Platform
-       * @description TV, Web, 欧美剧, PS4...
-       */
-      platform: string;
-      images?: components["schemas"]["Images"];
-      /** Infobox */
-      infobox?: components["schemas"]["Item"][];
-      /**
-       * Volumes
-       * @description 书籍条目的册数，由旧服务端从wiki中解析
-       */
-      volumes: number;
-      /**
-       * Eps
-       * @description 由旧服务端从wiki中解析，对于书籍条目为`话数`
-       */
-      eps: number;
-      /**
-       * Total Episodes
-       * @description 数据库中的章节数量
-       */
-      total_episodes: number;
-      rating: components["schemas"]["Rating"];
-      collection: components["schemas"]["Collection"];
-      /** Tags */
-      tags: components["schemas"]["Tag"][];
-    };
-    /** Tag */
-    Tag: {
-      /** Name */
-      name: string;
-      /** Count */
-      count: number;
-    };
-    /**
-     * UserGroup
-     * @description An enumeration.
-     */
-    UserGroup: 1 | 2 | 3 | 4 | 5 | 8 | 9 | 10 | 11;
-    /** V */
-    V: {
-      /** V */
-      v: string;
-    };
-    /** ValidationError */
-    ValidationError: {
-      /** Location */
-      loc: string[];
-      /** Message */
-      msg: string;
-      /** Error Type */
-      type: string;
-    };
-    /** RelatedSubject */
-    pol__api__v0__models__RelatedSubject: {
-      /** Id */
-      id: number;
-      /** Staff */
-      staff: string;
-      /** Name */
-      name?: string;
-      /** Name Cn */
-      name_cn: string;
-      /** Image */
-      image?: string;
-    };
-    /** RelatedSubject */
-    pol__api__v0__models__subject__RelatedSubject: {
-      /** Id */
-      id: number;
-      /** Type */
-      type: number;
-      /** Name */
-      name: string;
-      /** Name Cn */
-      name_cn: string;
-      images?: components["schemas"]["Images"];
-      /** Relation */
-      relation: string;
-    };
     /**
      * @description 收藏状态 ID
      * @example 5
@@ -1034,190 +507,11 @@ export interface components {
     EpStatusType: "watched" | "queue" | "drop" | "remove";
     /** @description 章节状态名称 */
     EpStatusName: "看过" | "想看" | "抛弃" | "撤销";
-    /** @description 章节状态 <br> 2 = watched = 看过 <br> 1 = queue = 想看 <br> 3 = drop = 抛弃 <br> ? = remove = 撤销 */
-    EpStatus: {
-      id: components["schemas"]["EpStatusId"];
-      type: components["schemas"]["EpStatusType"];
-      name: components["schemas"]["EpStatusName"];
-    };
     /**
      * @description 返回数据大小
      * @default small
      */
-    ResponseGroup: "small" | "medium" | "large";
-    /** @description 人物（基础模型） */
-    MonoBase: {
-      /** @description 人物 ID */
-      id: number;
-      /** @description 人物地址 */
-      url: string;
-      /** @description 姓名 */
-      name: string;
-      /** @description 肖像 */
-      images: {
-        /** @example http://lain.bgm.tv/pic/crt/l/ce/65/32_crt_XMJOj.jpg */
-        large: string;
-        /** @example http://lain.bgm.tv/pic/crt/m/ce/65/32_crt_XMJOj.jpg */
-        medium: string;
-        /** @example http://lain.bgm.tv/pic/crt/s/ce/65/32_crt_XMJOj.jpg */
-        small: string;
-        /** @example http://lain.bgm.tv/pic/crt/g/ce/65/32_crt_XMJOj.jpg */
-        grid: string;
-      };
-    };
-    /** @description 人物 */
-    Mono: components["schemas"]["MonoBase"] & {
-      /** @description 简体中文名 */
-      name_cn: string;
-      /** @description 回复数量 */
-      comment: number;
-      /** @description 收藏人数 */
-      collects: number;
-    };
-    /** @description 人物信息 */
-    MonoInfo: {
-      /**
-       * @description 生日
-       * @example 4月13日
-       */
-      birth: string;
-      /**
-       * @description 身高
-       * @example 152cm
-       */
-      height: string;
-      /**
-       * @description 性别
-       * @example 女
-       */
-      gender: string;
-      /** @description 别名（另外添加出来的 key 为 0 开始的数字） */
-      alias: {
-        /** @description 日文名 */
-        jp: string;
-        /** @description 纯假名 */
-        kana: string;
-        /** @description 昵称 */
-        nick: string;
-        /** @description 罗马字 */
-        romaji: string;
-        /** @description 第二中文名 */
-        zh: string;
-      };
-      /** @description 引用来源 */
-      source: string | string[];
-      /** @description 简体中文名 */
-      name_cn: string;
-      /** @description 声优 */
-      cv: string;
-    };
-    /** @description 现实人物 */
-    Person: components["schemas"]["Mono"] & {
-      info: components["schemas"]["MonoInfo"];
-    };
-    /** @description 虚拟角色 */
-    Character: components["schemas"]["Mono"] & {
-      info: components["schemas"]["MonoInfo"];
-      /** @description 声优列表 */
-      actors: components["schemas"]["MonoBase"][];
-    };
-    /** @description 章节类型 <br> 0 = 本篇 <br> 1 = 特别篇 <br> 2 = OP <br> 3 = ED <br> 4 = 预告/宣传/广告 <br> 5 = MAD <br> 6 = 其他 */
-    EpisodeType: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-    /** @description 章节信息 */
-    Episode1: {
-      /**
-       * @description 章节 ID
-       * @example 1027
-       */
-      id: number;
-      /**
-       * @description 章节地址
-       * @example http://bgm.tv/ep/1027
-       */
-      url: string;
-      type: components["schemas"]["EpisodeType"];
-      /**
-       * @description 集数
-       * @example 1
-       */
-      sort: number;
-      /**
-       * @description 标题
-       * @example ちぃ 目覚める
-       */
-      name: string;
-      /**
-       * @description 简体中文标题
-       * @example 叽，觉醒了
-       */
-      name_cn: string;
-      /**
-       * @description 时长
-       * @example 24m
-       */
-      duration: string;
-      /**
-       * @description 放送日期
-       * @example 2002-04-03
-       */
-      airdate: string;
-      /**
-       * @description 回复数量
-       * @example 9
-       */
-      comment: number;
-      /** @description 简介 */
-      desc: string;
-      /**
-       * @description 放送状态 <br> Air = 已放送 <br> Today = 正在放送 <br> NA = 未放送
-       * @example Air
-       */
-      status: "Air" | "Today" | "NA";
-    };
-    /** @description 讨论版 */
-    Topic: {
-      /** @description ID */
-      id: number;
-      /** @description 地址 */
-      url: string;
-      /** @description 标题 */
-      title: string;
-      /** @description 所属对象（条目） ID */
-      main_id: number;
-      /** @description 发布时间 */
-      timestamp: number;
-      /** @description 最后回复时间 */
-      lastpost: number;
-      /** @description 回复数 */
-      replies: number;
-      user: components["schemas"]["User"];
-    };
-    /** @description 日志 */
-    Blog: {
-      /** @description ID */
-      id: number;
-      /** @description 地址 */
-      url: string;
-      /** @description 标题 */
-      title: string;
-      /** @description 概览 */
-      summary: string;
-      /** @description 图片 */
-      image: string;
-      /** @description 回复数 */
-      replies: number;
-      /**
-       * @description 发布时间
-       * @example 1357144903
-       */
-      timestamp: number;
-      /**
-       * @description 发布时间
-       * @example 2013-1-2 16:41
-       */
-      dateline: string;
-      user: components["schemas"]["User"];
-    };
+    ResponseGroup: "small" | "medium";
     /**
      * @description 条目类型 <br> 1 = book <br> 2 = anime <br> 3 = music <br> 4 = game <br> 6 = real
      * @example 2
@@ -1256,7 +550,7 @@ export interface components {
        */
       dropped: number;
     };
-    Subject1: {
+    Subject: {
       /**
        * @description 条目 ID
        * @example 12
@@ -1274,7 +568,7 @@ export interface components {
        */
       name: string;
     };
-    SubjectBase: components["schemas"]["Subject1"] & {
+    SubjectBase: components["schemas"]["Subject"] & {
       /**
        * @description 条目中文名称
        * @example 人形电脑天使心
@@ -1363,34 +657,6 @@ export interface components {
       rank: number;
       collection: components["schemas"]["SubjectCollection"];
     };
-    SubjectMedium: components["schemas"]["SubjectSmall"] & {
-      /** @description 角色信息 */
-      crt: (components["schemas"]["Character"] & {
-        /**
-         * @description 角色类型
-         * @example 主角
-         */
-        role_name: string;
-      })[];
-      /** @description 制作人员信息 */
-      staff: (components["schemas"]["Person"] & {
-        /**
-         * @description 人物类型
-         * @example 主角
-         */
-        role_name: string;
-        /** @description 职位 */
-        jobs: string[];
-      })[];
-    };
-    SubjectLarge: components["schemas"]["SubjectMedium"] & {
-      /** @description 章节列表 */
-      eps: components["schemas"]["Episode1"][];
-      /** @description 讨论版 */
-      topic: components["schemas"]["Topic"][];
-      /** @description 评论日志 */
-      blog: components["schemas"]["Blog"][];
-    };
     /** @description 用户信息 */
     User: {
       /**
@@ -1427,13 +693,13 @@ export interface components {
        * @example Awesome!
        */
       sign: string;
-      usergroup: components["schemas"]["UserGroup1"];
+      usergroup: components["schemas"]["UserGroup"];
     };
     /**
      * @description 用户组 <br> 1 = 管理员 <br> 2 = Bangumi 管理猿 <br> 3 = 天窗管理猿 <br> 4 = 禁言用户 <br> 5 = 禁止访问用户 <br> 8 = 人物管理猿 <br> 9 = 维基条目管理猿 <br> 10 = 用户 <br> 11 = 维基人
      * @example 11
      */
-    UserGroup1: 1 | 2 | 3 | 4 | 5 | 8 | 9 | 10 | 11;
+    UserGroup: 1 | 2 | 3 | 4 | 5 | 8 | 9 | 10 | 11;
     /** @description 响应状态（HTTP 状态码都为 200） */
     StatusCode: {
       /** @description 当前请求的地址 */
@@ -1453,6 +719,749 @@ export interface components {
         | 404;
       /** @description 状态信息 */
       error: string;
+    };
+    /** Avatar */
+    Avatar: {
+      /** Large */
+      large: string;
+      /** Medium */
+      medium: string;
+      /** Small */
+      small: string;
+    };
+    /**
+     * BloodType
+     * @description An enumeration.
+     */
+    BloodType: 1 | 2 | 3 | 4;
+    /** CharacterDetail */
+    CharacterDetail: {
+      /** Id */
+      id: number;
+      /** Name */
+      name: string;
+      /** @description 角色，机体，舰船，组织... */
+      type: components["schemas"]["CharacterType"];
+      /**
+       * Images
+       * @description object with some size of images, this object maybe `null`
+       */
+      images?: components["schemas"]["PersonImages"];
+      /** Summary */
+      summary: string;
+      /** Locked */
+      locked: boolean;
+      /**
+       * Infobox
+       * @description server parsed infobox, a map from key to string or tuple
+       * null if server infobox is not valid
+       */
+      infobox?: { [key: string]: unknown }[];
+      /**
+       * Gender
+       * @description parsed from wiki, maybe null
+       */
+      gender?: string;
+      /** @description parsed from wiki, maybe null, `1, 2, 3, 4` for `A, B, CD, O` */
+      blood_type?: components["schemas"]["BloodType"];
+      /**
+       * Birth Year
+       * @description parsed from wiki, maybe `null`
+       */
+      birth_year?: number;
+      /**
+       * Birth Mon
+       * @description parsed from wiki, maybe `null`
+       */
+      birth_mon?: number;
+      /**
+       * Birth Day
+       * @description parsed from wiki, maybe `null`
+       */
+      birth_day?: number;
+      stat: components["schemas"]["Stat"];
+    };
+    /** CharacterPerson */
+    CharacterPerson: {
+      /** Id */
+      id: number;
+      /** Name */
+      name: string;
+      /** @description 角色，机体，舰船，组织... */
+      type: components["schemas"]["CharacterType"];
+      /**
+       * Images
+       * @description object with some size of images, this object maybe `null`
+       */
+      images?: components["schemas"]["PersonImages"];
+      /** Subject Id */
+      subject_id: number;
+      /** Subject Name */
+      subject_name: string;
+      /** Subject Name Cn */
+      subject_name_cn: string;
+    };
+    /**
+     * CharacterType
+     * @description An enumeration.
+     */
+    CharacterType: 1 | 2 | 3 | 4;
+    /** Collection */
+    Collection: {
+      /** Wish */
+      wish: number;
+      /** Collect */
+      collect: number;
+      /** Doing */
+      doing: number;
+      /** On Hold */
+      on_hold: number;
+      /** Dropped */
+      dropped: number;
+    };
+    /**
+     * CollectionType
+     * @description - `1`: 想看
+     * - `2`: 看过
+     * - `3`: 在看
+     * - `4`: 搁置
+     * - `5`: 抛弃
+     */
+    CollectionType: 1 | 2 | 3 | 4 | 5;
+    /**
+     * Creator
+     * @description 意义同<a href="#model-Me">Me</a>
+     */
+    Creator: {
+      /** Username */
+      username: string;
+      /** Nickname */
+      nickname: string;
+    };
+    /** DetailedRevision */
+    DetailedRevision: {
+      /** Id */
+      id: number;
+      /** Type */
+      type: number;
+      creator?: components["schemas"]["Creator"];
+      /** Summary */
+      summary: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /**
+       * Data
+       * @description 编辑修改内容
+       */
+      data?: unknown;
+    };
+    /**
+     * EpType
+     * @description 本篇 = 0
+     * 特别篇 = 1
+     * OP = 2
+     * ED = 3
+     * 预告/宣传/广告 = 4
+     * MAD = 5
+     * 其他 = 6
+     */
+    EpType: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+    /** Episode */
+    Episode: {
+      /** Id */
+      id: number;
+      /**
+       * Type
+       * @description `0` 本篇，`1` SP，`2` OP，`3` ED
+       */
+      type: number;
+      /** Name */
+      name: string;
+      /** Name Cn */
+      name_cn: string;
+      /**
+       * Sort
+       * @description 同类条目的排序和集数
+       */
+      sort: number;
+      /**
+       * Ep
+       * @description 条目内的集数, 从`1`开始。非本篇剧集的此字段无意义
+       */
+      ep?: number;
+      /** Airdate */
+      airdate: string;
+      /** Comment */
+      comment: number;
+      /** Duration */
+      duration: string;
+      /**
+       * Desc
+       * @description 简介
+       */
+      desc: string;
+      /**
+       * Disc
+       * @description 音乐曲目的碟片数
+       */
+      disc: number;
+    };
+    /** EpisodeDetail */
+    EpisodeDetail: {
+      /** Id */
+      id: number;
+      /**
+       * Type
+       * @description `0` 本篇，`1` SP，`2` OP，`3` ED
+       */
+      type: number;
+      /** Name */
+      name: string;
+      /** Name Cn */
+      name_cn: string;
+      /**
+       * Sort
+       * @description 同类条目的排序和集数
+       */
+      sort: number;
+      /**
+       * Ep
+       * @description 条目内的集数, 从`1`开始。非本篇剧集的此字段无意义
+       */
+      ep?: number;
+      /** Airdate */
+      airdate: string;
+      /** Comment */
+      comment: number;
+      /** Duration */
+      duration: string;
+      /**
+       * Desc
+       * @description 简介
+       */
+      desc: string;
+      /**
+       * Disc
+       * @description 音乐曲目的碟片数
+       */
+      disc: number;
+      /** Subject Id */
+      subject_id: number;
+    };
+    /** ErrorDetail */
+    ErrorDetail: {
+      /** Title */
+      title: string;
+      /** Description */
+      description: string;
+      /** Detail */
+      detail: {
+        /** @description error message */
+        error: string;
+        /** @description request path */
+        path: string;
+      };
+    };
+    /** Images */
+    Images: {
+      /** Large */
+      large: string;
+      /** Common */
+      common: string;
+      /** Medium */
+      medium: string;
+      /** Small */
+      small: string;
+      /** Grid */
+      grid: string;
+    };
+    /** Index */
+    Index: {
+      /** Id */
+      id: number;
+      /** Title */
+      title: string;
+      /** Desc */
+      desc: string;
+      /**
+       * Total
+       * @description 收录条目总数
+       */
+      total?: number;
+      /**
+       * Stat
+       * @description 目录评论及收藏数
+       */
+      stat: components["schemas"]["Stat"];
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      creator: components["schemas"]["Creator"];
+      /** Ban */
+      ban: boolean;
+    };
+    /**
+     * IndexSubject
+     * @description 同名字段意义同<a href="#model-Subject">Subject</a>
+     */
+    IndexSubject: {
+      /** Id */
+      id: number;
+      /** Type */
+      type: number;
+      /** Name */
+      name: string;
+      images?: components["schemas"]["Images"];
+      /** Infobox */
+      infobox?: components["schemas"]["Item"][];
+      /** Date */
+      date?: string;
+      /** Comment */
+      comment: string;
+      /**
+       * Added At
+       * Format: date-time
+       */
+      added_at: string;
+    };
+    /** Item */
+    Item: {
+      /** Key */
+      key: string;
+      /** Value */
+      value: Partial<string> &
+        Partial<
+          (Partial<components["schemas"]["KV"]> &
+            Partial<components["schemas"]["V"]>)[]
+        >;
+    };
+    /** KV */
+    KV: {
+      /** K */
+      k: string;
+      /** V */
+      v: string;
+    };
+    /** Me */
+    Me: {
+      /** Id */
+      id: number;
+      /** Url */
+      url: string;
+      /**
+       * Username
+       * @description 唯一用户名，初始与uid相同，可修改
+       */
+      username: string;
+      /** Nickname */
+      nickname: string;
+      user_group: components["schemas"]["UserGroup1"];
+      avatar: components["schemas"]["Avatar"];
+      /** Sign */
+      sign: string;
+    };
+    /** Paged[Episode] */
+    Paged_Episode_: {
+      /** Total */
+      total: number;
+      /** Limit */
+      limit: number;
+      /** Offset */
+      offset: number;
+      /**
+       * Data
+       * @default
+       */
+      data: components["schemas"]["Episode"][];
+    };
+    /** Paged[IndexSubject] */
+    Paged_IndexSubject_: {
+      /** Total */
+      total: number;
+      /** Limit */
+      limit: number;
+      /** Offset */
+      offset: number;
+      /**
+       * Data
+       * @default
+       */
+      data: components["schemas"]["IndexSubject"][];
+    };
+    /** Paged[Revision] */
+    Paged_Revision_: {
+      /** Total */
+      total: number;
+      /** Limit */
+      limit: number;
+      /** Offset */
+      offset: number;
+      /**
+       * Data
+       * @default
+       */
+      data: components["schemas"]["Revision"][];
+    };
+    /** Paged[UserCollection] */
+    Paged_UserCollection_: {
+      /** Total */
+      total: number;
+      /** Limit */
+      limit: number;
+      /** Offset */
+      offset: number;
+      /**
+       * Data
+       * @default
+       */
+      data: components["schemas"]["UserCollection"][];
+    };
+    /** Person */
+    Person: {
+      /** Id */
+      id: number;
+      /** Name */
+      name: string;
+      /** @description `1`, `2`, `3` 表示 `个人`, `公司`, `组合` */
+      type: components["schemas"]["PersonType"];
+      career: components["schemas"]["PersonCareer"][];
+      /**
+       * Images
+       * @description object with some size of images, this object maybe `null`
+       */
+      images?: components["schemas"]["PersonImages"];
+      /** Short Summary */
+      short_summary: string;
+      /** Locked */
+      locked: boolean;
+    };
+    /**
+     * PersonCareer
+     * @description An enumeration.
+     */
+    PersonCareer:
+      | "producer"
+      | "mangaka"
+      | "artist"
+      | "seiyu"
+      | "writer"
+      | "illustrator"
+      | "actor";
+    /** PersonCharacter */
+    PersonCharacter: {
+      /** Id */
+      id: number;
+      /** Name */
+      name: string;
+      /** @description 角色，机体，舰船，组织... */
+      type: components["schemas"]["CharacterType"];
+      /**
+       * Images
+       * @description object with some size of images, this object maybe `null`
+       */
+      images?: components["schemas"]["PersonImages"];
+      /** Subject Id */
+      subject_id: number;
+      /** Subject Name */
+      subject_name: string;
+      /** Subject Name Cn */
+      subject_name_cn: string;
+    };
+    /** PersonDetail */
+    PersonDetail: {
+      /** Id */
+      id: number;
+      /** Name */
+      name: string;
+      /** @description `1`, `2`, `3` 表示 `个人`, `公司`, `组合` */
+      type: components["schemas"]["PersonType"];
+      career: components["schemas"]["PersonCareer"][];
+      /**
+       * Images
+       * @description object with some size of images, this object maybe `null`
+       */
+      images?: components["schemas"]["PersonImages"];
+      /** Summary */
+      summary: string;
+      /** Locked */
+      locked: boolean;
+      /**
+       * Last Modified
+       * Format: date-time
+       * @description currently it's latest user comment time, it will be replaced by wiki modified date in the future
+       */
+      last_modified: string;
+      /**
+       * Infobox
+       * @description server parsed infobox, a map from key to string or tuple
+       * null if server infobox is not valid
+       */
+      infobox?: { [key: string]: unknown }[];
+      /**
+       * Gender
+       * @description parsed from wiki, maybe null
+       */
+      gender?: string;
+      /** @description parsed from wiki, maybe null, `1, 2, 3, 4` for `A, B, CD, O` */
+      blood_type?: components["schemas"]["BloodType"];
+      /**
+       * Birth Year
+       * @description parsed from wiki, maybe `null`
+       */
+      birth_year?: number;
+      /**
+       * Birth Mon
+       * @description parsed from wiki, maybe `null`
+       */
+      birth_mon?: number;
+      /**
+       * Birth Day
+       * @description parsed from wiki, maybe `null`
+       */
+      birth_day?: number;
+      stat: components["schemas"]["Stat"];
+    };
+    /** PersonImages */
+    PersonImages: {
+      /** Large */
+      large: string;
+      /** Medium */
+      medium: string;
+      /** Small */
+      small: string;
+      /** Grid */
+      grid: string;
+    };
+    /**
+     * PersonType
+     * @description An enumeration.
+     */
+    PersonType: 1 | 2 | 3;
+    /** Rating */
+    Rating: {
+      /** Rank */
+      rank: number;
+      /** Total */
+      total: number;
+      /** Count */
+      count: {
+        "1": number;
+        "2": number;
+        "3": number;
+        "4": number;
+        "5": number;
+        "6": number;
+        "7": number;
+        "8": number;
+        "9": number;
+        "10": number;
+      };
+      /** Score */
+      score: number;
+    };
+    /** RelatedCharacter */
+    RelatedCharacter: {
+      /** Id */
+      id: number;
+      /** Name */
+      name: string;
+      /** @description 角色，机体，舰船，组织... */
+      type: components["schemas"]["CharacterType"];
+      /**
+       * Images
+       * @description object with some size of images, this object maybe `null`
+       */
+      images?: components["schemas"]["PersonImages"];
+      /** Relation */
+      relation: string;
+      /**
+       * Actors
+       * @description 演员列表
+       * @default
+       */
+      actors?: components["schemas"]["Person"][];
+    };
+    /** RelatedPerson */
+    RelatedPerson: {
+      /** Id */
+      id: number;
+      /** Name */
+      name: string;
+      /** @description `1`, `2`, `3` 表示 `个人`, `公司`, `组合` */
+      type: components["schemas"]["PersonType"];
+      career: components["schemas"]["PersonCareer"][];
+      /**
+       * Images
+       * @description object with some size of images, this object maybe `null`
+       */
+      images?: components["schemas"]["PersonImages"];
+      /** Relation */
+      relation: string;
+    };
+    /** Revision */
+    Revision: {
+      /** Id */
+      id: number;
+      /** Type */
+      type: number;
+      creator?: components["schemas"]["Creator"];
+      /** Summary */
+      summary: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+    };
+    /** Stat */
+    Stat: {
+      /** Comments */
+      comments: number;
+      /** Collects */
+      collects: number;
+    };
+    /** Subject */
+    Subject1: {
+      /** Id */
+      id: number;
+      /** Type */
+      type: number;
+      /** Name */
+      name: string;
+      /** Name Cn */
+      name_cn: string;
+      /** Summary */
+      summary: string;
+      /** Nsfw */
+      nsfw: boolean;
+      /** Locked */
+      locked: boolean;
+      /**
+       * Date
+       * @description air date in `YYYY-MM-DD` format
+       */
+      date?: string;
+      /**
+       * Platform
+       * @description TV, Web, 欧美剧, PS4...
+       */
+      platform: string;
+      images?: components["schemas"]["Images"];
+      /** Infobox */
+      infobox?: components["schemas"]["Item"][];
+      /**
+       * Volumes
+       * @description 书籍条目的册数，由旧服务端从wiki中解析
+       */
+      volumes: number;
+      /**
+       * Eps
+       * @description 由旧服务端从wiki中解析，对于书籍条目为`话数`
+       */
+      eps: number;
+      /**
+       * Total Episodes
+       * @description 数据库中的章节数量
+       */
+      total_episodes: number;
+      rating: components["schemas"]["Rating"];
+      collection: components["schemas"]["Collection"];
+      /** Tags */
+      tags: components["schemas"]["Tag"][];
+    };
+    /**
+     * SubjectType
+     * @description 条目类型
+     * - `1` 为 书籍
+     * - `2` 为 动画
+     * - `3` 为 音乐
+     * - `4` 为 游戏
+     * - `6` 为 三次元
+     *
+     * 没有 `5`
+     */
+    SubjectType1: 1 | 2 | 3 | 4 | 6;
+    /** Tag */
+    Tag: {
+      /** Name */
+      name: string;
+      /** Count */
+      count: number;
+    };
+    /** UserCollection */
+    UserCollection: {
+      /** Subject Id */
+      subject_id: number;
+      subject_type: components["schemas"]["SubjectType1"];
+      /** Rate */
+      rate: number;
+      type: components["schemas"]["CollectionType"];
+      /** Comment */
+      comment?: string;
+      /** Tags */
+      tags: string[];
+      /** Ep Status */
+      ep_status: number;
+      /** Vol Status */
+      vol_status: number;
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string;
+      /** Private */
+      private: boolean;
+    };
+    /**
+     * UserGroup
+     * @description An enumeration.
+     */
+    UserGroup1: 1 | 2 | 3 | 4 | 5 | 8 | 9 | 10 | 11;
+    /** V */
+    V: {
+      /** V */
+      v: string;
+    };
+    /** ValidationError */
+    ValidationError: {
+      /** Location */
+      loc: string[];
+      /** Message */
+      msg: string;
+      /** Error Type */
+      type: string;
+    };
+    /** RelatedSubject */
+    pol__api__v0__models__RelatedSubject: {
+      /** Id */
+      id: number;
+      /** Staff */
+      staff: string;
+      /** Name */
+      name?: string;
+      /** Name Cn */
+      name_cn: string;
+      /** Image */
+      image?: string;
+    };
+    /** RelatedSubject */
+    pol__api__v0__models__subject__RelatedSubject: {
+      /** Id */
+      id: number;
+      /** Type */
+      type: number;
+      /** Name */
+      name: string;
+      /** Name Cn */
+      name_cn: string;
+      images?: components["schemas"]["Images"];
+      /** Relation */
+      relation: string;
     };
   };
   responses: {
@@ -1496,7 +1505,7 @@ export interface components {
 
 export interface operations {
   /** cache with 300s */
-  get_subject_v0_subjects__subject_id__get: {
+  get_subject_by_id_v0_subjects__subject_id__get: {
     parameters: {
       path: {
         subject_id: number;
@@ -1506,19 +1515,19 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Subject"];
+          "application/json": components["schemas"]["Subject1"];
+        };
+      };
+      /** Validation Error */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
         };
       };
       /** Not Found */
       404: {
         content: {
           "application/json": components["schemas"]["ErrorDetail"];
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -1536,16 +1545,16 @@ export interface operations {
           "application/json": components["schemas"]["RelatedPerson"][];
         };
       };
-      /** Not Found */
-      404: {
+      /** Validation Error */
+      400: {
         content: {
           "application/json": components["schemas"]["ErrorDetail"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** Not Found */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ErrorDetail"];
         };
       };
     };
@@ -1563,16 +1572,16 @@ export interface operations {
           "application/json": components["schemas"]["RelatedCharacter"][];
         };
       };
-      /** Not Found */
-      404: {
+      /** Validation Error */
+      400: {
         content: {
           "application/json": components["schemas"]["ErrorDetail"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** Not Found */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ErrorDetail"];
         };
       };
     };
@@ -1590,16 +1599,16 @@ export interface operations {
           "application/json": components["schemas"]["pol__api__v0__models__subject__RelatedSubject"][];
         };
       };
-      /** Not Found */
-      404: {
+      /** Validation Error */
+      400: {
         content: {
           "application/json": components["schemas"]["ErrorDetail"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** Not Found */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ErrorDetail"];
         };
       };
     };
@@ -1608,7 +1617,7 @@ export interface operations {
     parameters: {
       query: {
         subject_id: number;
-        /** `0`,`1`,`2`,`3`代表`本篇`，`sp`，`op`，`ed` */
+        /** 参照章节的`type` */
         type?: components["schemas"]["EpType"];
         limit?: number;
         offset?: number;
@@ -1621,16 +1630,16 @@ export interface operations {
           "application/json": components["schemas"]["Paged_Episode_"];
         };
       };
-      /** Not Found */
-      404: {
+      /** Validation Error */
+      400: {
         content: {
           "application/json": components["schemas"]["ErrorDetail"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** Not Found */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ErrorDetail"];
         };
       };
     };
@@ -1648,16 +1657,16 @@ export interface operations {
           "application/json": components["schemas"]["EpisodeDetail"];
         };
       };
-      /** Not Found */
-      404: {
+      /** Validation Error */
+      400: {
         content: {
           "application/json": components["schemas"]["ErrorDetail"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** Not Found */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ErrorDetail"];
         };
       };
     };
@@ -1676,16 +1685,16 @@ export interface operations {
           "application/json": components["schemas"]["CharacterDetail"];
         };
       };
-      /** Not Found */
-      404: {
+      /** Validation Error */
+      400: {
         content: {
           "application/json": components["schemas"]["ErrorDetail"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** Not Found */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ErrorDetail"];
         };
       };
     };
@@ -1703,16 +1712,16 @@ export interface operations {
           "application/json": components["schemas"]["pol__api__v0__models__RelatedSubject"][];
         };
       };
-      /** Not Found */
-      404: {
+      /** Validation Error */
+      400: {
         content: {
           "application/json": components["schemas"]["ErrorDetail"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** Not Found */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ErrorDetail"];
         };
       };
     };
@@ -1730,16 +1739,16 @@ export interface operations {
           "application/json": components["schemas"]["CharacterPerson"][];
         };
       };
-      /** Not Found */
-      404: {
+      /** Validation Error */
+      400: {
         content: {
           "application/json": components["schemas"]["ErrorDetail"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** Not Found */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ErrorDetail"];
         };
       };
     };
@@ -1758,16 +1767,16 @@ export interface operations {
           "application/json": components["schemas"]["PersonDetail"];
         };
       };
-      /** Not Found */
-      404: {
+      /** Validation Error */
+      400: {
         content: {
           "application/json": components["schemas"]["ErrorDetail"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** Not Found */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ErrorDetail"];
         };
       };
     };
@@ -1785,16 +1794,16 @@ export interface operations {
           "application/json": components["schemas"]["pol__api__v0__models__RelatedSubject"][];
         };
       };
-      /** Not Found */
-      404: {
+      /** Validation Error */
+      400: {
         content: {
           "application/json": components["schemas"]["ErrorDetail"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** Not Found */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ErrorDetail"];
         };
       };
     };
@@ -1812,22 +1821,22 @@ export interface operations {
           "application/json": components["schemas"]["PersonCharacter"][];
         };
       };
+      /** Validation Error */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
       /** Not Found */
       404: {
         content: {
           "application/json": components["schemas"]["ErrorDetail"];
         };
       };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
     };
   };
   /** 返回当前 Access Token 对应的用户信息 */
-  get_subject_v0_me_get: {
+  get_user_v0_me_get: {
     responses: {
       /** Successful Response */
       200: {
@@ -1837,6 +1846,310 @@ export interface operations {
       };
       /** unauthorized */
       403: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+    };
+  };
+  /** 获取对应用户的收藏，查看私有收藏需要access token。 */
+  get_user_collection_v0_users__username__collections_get: {
+    parameters: {
+      path: {
+        /** 设置了 username 后无法使用UID */
+        username: string;
+      };
+      query: {
+        /**
+         * 条目类型，默认为全部
+         *
+         * 具体含义见 [SubjectType](#model-SubjectType)
+         */
+        subject_type?: components["schemas"]["SubjectType1"];
+        /**
+         * 收藏类型，默认为全部
+         *
+         * 具体含义见 [CollectionType](#model-CollectionType)
+         */
+        type?: components["schemas"]["CollectionType"];
+        limit?: number;
+        offset?: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Paged_UserCollection_"];
+        };
+      };
+      /** Validation Error */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+      /** 用户不存在 */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+    };
+  };
+  get_person_revisions_v0_revisions_persons_get: {
+    parameters: {
+      query: {
+        person_id: number;
+        limit?: number;
+        offset?: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Paged_Revision_"];
+        };
+      };
+      /** Validation Error */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+    };
+  };
+  get_person_revision_v0_revisions_persons__revision_id__get: {
+    parameters: {
+      path: {
+        revision_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["DetailedRevision"];
+        };
+      };
+      /** Validation Error */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+    };
+  };
+  get_character_revisions_v0_revisions_characters_get: {
+    parameters: {
+      query: {
+        character_id: number;
+        limit?: number;
+        offset?: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Paged_Revision_"];
+        };
+      };
+      /** Validation Error */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+    };
+  };
+  get_character_revision_v0_revisions_characters__revision_id__get: {
+    parameters: {
+      path: {
+        revision_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["DetailedRevision"];
+        };
+      };
+      /** Validation Error */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+    };
+  };
+  get_subject_revisions_v0_revisions_subjects_get: {
+    parameters: {
+      query: {
+        subject_id: number;
+        limit?: number;
+        offset?: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Paged_Revision_"];
+        };
+      };
+      /** Validation Error */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+    };
+  };
+  get_subject_revision_v0_revisions_subjects__revision_id__get: {
+    parameters: {
+      path: {
+        revision_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["DetailedRevision"];
+        };
+      };
+      /** Validation Error */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+    };
+  };
+  get_episode_revisions_v0_revisions_episodes_get: {
+    parameters: {
+      query: {
+        episode_id: number;
+        limit?: number;
+        offset?: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Paged_Revision_"];
+        };
+      };
+      /** Validation Error */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+    };
+  };
+  get_episode_revision_v0_revisions_episodes__revision_id__get: {
+    parameters: {
+      path: {
+        revision_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["DetailedRevision"];
+        };
+      };
+      /** Validation Error */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+    };
+  };
+  get_index_by_id_v0_indices__index_id__get: {
+    parameters: {
+      path: {
+        index_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Index"];
+        };
+      };
+      /** Validation Error */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+    };
+  };
+  get_index_subjects_v0_indices__index_id__subjects_get: {
+    parameters: {
+      path: {
+        index_id: number;
+      };
+      query: {
+        type?: components["schemas"]["SubjectType1"];
+        limit?: number;
+        offset?: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Paged_IndexSubject_"];
+        };
+      };
+      /** Validation Error */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorDetail"];
+        };
+      };
+      /** Not Found */
+      404: {
         content: {
           "application/json": components["schemas"]["ErrorDetail"];
         };
