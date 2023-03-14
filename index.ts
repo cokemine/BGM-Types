@@ -113,6 +113,12 @@ export namespace BGMCategory {
 
   export type Subjects =
     paths['/v0/indices/{index_id}/subjects']['get']['responses']['200'];
+
+  export type Create =
+    paths['/v0/indices']['post']['responses']['200']['content']['application/json'];
+
+  export type Edit =
+    paths['/v0/indices/{index_id}']['put']['responses']['200']['content']['application/json'];
 }
 
 /** 搜索 */
