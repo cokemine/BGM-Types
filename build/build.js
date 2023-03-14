@@ -9,8 +9,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // patch
 function dfs(obj) {
   if (
-    Object.prototype.hasOwnProperty.call(obj, 'properties')
-    && !Object.prototype.hasOwnProperty.call(obj, 'required')
+    Object.prototype.hasOwnProperty.call(obj, 'properties') &&
+    !Object.prototype.hasOwnProperty.call(obj, 'required')
   ) {
     obj.required = Object.keys(obj.properties);
   }
@@ -21,9 +21,11 @@ function dfs(obj) {
 
 axios
   .get('https://bangumi.github.io/api/dist.json')
-  .then(res => {
+  .then((res) => {
     const doc = res.data;
     dfs(doc);
     return swaggerToTS(doc);
   })
-  .then(data => fs.writeFileSync(path.resolve(__dirname, '../types/index.ts'), data));
+  .then((data) =>
+    fs.writeFileSync(path.resolve(__dirname, './src/types/index.ts'), data)
+  );

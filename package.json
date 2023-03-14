@@ -2,15 +2,15 @@
   "name": "bgm-types",
   "version": "2.0.2",
   "description": "Bangumi Api Types",
-  "main": "index.ts",
-  "types": "index.ts",
+  "main": "main.ts",
+  "types": "main.ts",
   "type": "module",
   "scripts": {
     "build": "node build/build.js"
   },
   "files": [
-    "index.ts",
-    "types"
+    "main.ts",
+    "src"
   ],
   "keywords": [
     "Bangumi",
