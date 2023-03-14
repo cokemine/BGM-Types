@@ -21,8 +21,8 @@
   "license": "MIT",
   "repository": "github:cokemine/bgm-types",
   "devDependencies": {
-    "axios": "^0.21.1",
-    "js-yaml": "^4.0.0",
-    "openapi-typescript": "^5.0.0"
+    "axios": "^0.21.4",
+    "js-yaml": "^4.1.0",
+    "openapi-typescript": "^5.4.1"
   }
 }
