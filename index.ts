@@ -121,6 +121,8 @@ export namespace BGMCategory {
     paths['/v0/indices/{index_id}']['put']['responses']['200']['content']['application/json'];
 }
 
+export { BGMCategory as BGMIndices };
+
 /** 搜索 */
 export namespace BGMSearch {
   export type Search =
