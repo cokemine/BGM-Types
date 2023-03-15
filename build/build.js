@@ -27,5 +27,5 @@ axios
     return swaggerToTS(doc);
   })
   .then((data) =>
-    fs.writeFileSync(path.resolve(__dirname, './src/types/index.ts'), data)
+    fs.writeFileSync(path.resolve(__dirname, '../src/types/index.ts'), data)
   );
