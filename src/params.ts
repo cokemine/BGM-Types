@@ -2,8 +2,10 @@ import { paths } from './types';
 
 /** 条目 */
 export namespace BGMSubjectParams {
+  /* ============ S - Search ============ */
   type SearchRequestBody =
     paths['/v0/search/subjects']['post']['requestBody']['content']['application/json'];
+
   type SearchQuery = paths['/v0/search/subjects']['post']['parameters']['query'];
 
   /** 实验性 API， 随时可能发生改动 */
@@ -11,6 +13,7 @@ export namespace BGMSubjectParams {
     query: SearchQuery;
     requestBody: SearchRequestBody;
   };
+  /* ============ E - Search ============ */
 
   export type Information = paths['/v0/subjects/{subject_id}']['get']['parameters'];
 
@@ -81,7 +84,7 @@ export namespace BGMCollectionParams {
 
   export type PatchSubject = {
     path: PatchSubjectPath;
-    requestBody?: PatchSubjectRequestBody;
+    requestBody: PatchSubjectRequestBody;
   };
 
   /* ============ E - PatchSubject ============ */
@@ -94,7 +97,7 @@ export namespace BGMCollectionParams {
     paths['/v0/users/-/collections/{subject_id}/episodes']['patch']['parameters']['path'];
 
   type PatchEpisodesInSubjectRequestBody =
-    paths['/v0/users/-/collections/{subject_id}/episodes']['patch']['requestBody'];
+    paths['/v0/users/-/collections/{subject_id}/episodes']['patch']['requestBody']['content']['application/json'];
 
   export type PatchEpisodesInSubject = {
     path: PatchEpisodesInSubjectPath;
