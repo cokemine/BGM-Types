@@ -2,7 +2,7 @@
 
 Bangumi.tv 官方 API 的 TypeScript 声明文件
 
-API: https://github.com/bangumi/api
+API: <https://github.com/bangumi/api>
 
 您目前访问的是新版本 API, 新版本 API 还在建设中，可能会有不稳定的变动。
 
@@ -18,6 +18,7 @@ npm install bgm-types -D
 
 ```javascript
 import {
+  // 返回值类型
   BGMPerson,
   BGMCharacter,
   BGMEpisode,
@@ -26,8 +27,19 @@ import {
   BGMSearch,
   BGMProgress,
   BGMCollection,
-  BGMCategory,
-  BGMEditHistory
+  BGMCategory, // 别名 BGMIndices
+  BGMEditHistory,
+
+  // 下面是请求参数类型
+  BGMSubjectParams,
+  BGMpisodeParams,
+  BGMCharacterParams,
+  BGMPersonParams,
+  BGMUserParams,
+  BGMCollectionParams,
+  BGMEditHistoryParams,
+  BGMCategoryParams, // 别名 BGMIndicesParams
+  BGMSearchParams,
 } from 'bgm-types';
 ```
 
@@ -41,8 +53,8 @@ import type { BGMUser } from 'bgm-types';
 (async () => {
   const res = await fetch('https://api.bgm.tv/user/Sai/collection?cat=watching', {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   });
   const data = (await res.json()) as BGMUser.Collection;
   for (let i = 0; i < data.length; ++i) {
@@ -53,6 +65,6 @@ import type { BGMUser } from 'bgm-types';
 
 ## Thanks
 
-openapi-typescript: https://github.com/drwpow/openapi-typescript
+openapi-typescript: <https://github.com/drwpow/openapi-typescript>
 
-js-yaml: https://github.com/nodeca/js-yaml
+js-yaml: <https://github.com/nodeca/js-yaml>
