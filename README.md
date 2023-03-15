@@ -67,17 +67,15 @@ import type { BGMUser } from 'bgm-types';
   }
 })();
 
-// 关于请求参数类型的使用, 以search api, axios请求为例
-const search(
-    keywords: Path<BGMSearchParams.Search>,
-    params?: Query<BGMSearchParams.Search>
-  ): Promise<BGMSearch.Search> => {
+// 关于请求参数类型的使用, 以 search api, axios 请求为例
+const search = (
+  keywords: Path<BGMSearchParams.Search>,
+  params?: Query<BGMSearchParams.Search>
+) => {
   const url = encodeURI(`/search/subject/${keywords}`);
-  const res = axios.get(url, {
+  return axios.get<BGMSearch.Search>(url, {
     params,
   });
-
-  return res.data;
 }
 // 其中 keywords 是路径参数
 // 使用类型 BGMSearchParams.Search['path']['keywords']
