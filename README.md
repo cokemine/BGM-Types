@@ -32,7 +32,7 @@ import {
 
   // 下面是请求参数类型
   BGMSubjectParams,
-  BGMpisodeParams,
+  BGMEpisodeParams,
   BGMCharacterParams,
   BGMPersonParams,
   BGMUserParams,

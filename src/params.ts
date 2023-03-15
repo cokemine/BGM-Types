@@ -25,7 +25,7 @@ export namespace BGMSubjectParams {
 }
 
 /** 章节 */
-export namespace BGMpisodeParams {
+export namespace BGMEpisodeParams {
   export type Episodes = paths['/v0/episodes']['get']['parameters'];
 
   export type EpisodeItem = paths['/v0/episodes/{episode_id}']['get']['parameters'];
