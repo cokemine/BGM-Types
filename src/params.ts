@@ -195,3 +195,13 @@ export { BGMCategoryParams as BGMIndicesParams };
 export namespace BGMSearchParams {
   export type Search = paths['/search/subject/{keywords}']['get']['parameters'];
 }
+
+type BGMParams = {
+  path?: any;
+  query?: any;
+  requestBody?: any;
+};
+
+export type Path<T extends BGMParams> = T['path'][keyof T['path']];
+export type Query<T extends BGMParams> = T['query'];
+export type RequestBody<T extends BGMParams> = T['requestBody'];
