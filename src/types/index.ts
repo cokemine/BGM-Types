@@ -177,12 +177,12 @@ export interface components {
        * @description 条目 ID
        * @example 12
        */
-      id: number;
+      id?: number;
       /**
        * @description 条目地址
        * @example https://bgm.tv/subject/12
        */
-      url: string;
+      url?: string;
       /**
        * SubjectType
        * @description 条目类型
@@ -196,152 +196,152 @@ export interface components {
        * @example 2
        * @enum {integer}
        */
-      type: 1 | 2 | 3 | 4 | 6;
+      type?: 1 | 2 | 3 | 4 | 6;
       /**
        * @description 条目名称
        * @example ちょびっツ
        */
-      name: string;
+      name?: string;
       /**
        * @description 条目中文名称
        * @example 人形电脑天使心
        */
-      name_cn: string;
+      name_cn?: string;
       /**
        * @description 剧情简介
        * @example 在不久的将来,电子技术飞速发展,电脑成为人们生活中不可缺少的一部分.主角的名字是本须和秀树,是个19岁的少年,由于考试失败,来到东京上补习班,过着贫穷潦倒的生活……\r\n到达东京的第一天,他很幸运的在垃圾堆捡到一个人型电脑,一直以来秀树都非常渴望拥有个人电脑.当他抱着她带返公寓后,却不知如何开机,在意想不到的地方找到开关并开启后,故事就此展开\r\n本须和秀树捡到了人型计算机〔唧〕。虽然不晓得她到底是不是〔Chobits〕，但她的身上似乎藏有极大的秘密。看到秀树为了钱而烦恼，唧出去找打工，没想到却找到了危险的工作！为了让秀树开心，唧开始到色情小屋打工。但她在遭到过度激烈的强迫要求之后失控。让周遭计算机因此而强制停摆。\r\n另一方面，秀树发现好友新保与补习班的清水老师有着不可告人的关系……
        */
-      summary: string;
+      summary?: string;
       /**
        * @description 放送开始日期
        * @example 2002-04-02
        */
-      air_date: string;
+      air_date?: string;
       /**
        * @description 放送星期
        * @example 2
        */
-      air_weekday: number;
+      air_weekday?: number;
       /** @description 封面 */
-      images: {
+      images?: {
         /** @example https://lain.bgm.tv/pic/cover/l/c2/0a/12_24O6L.jpg */
-        large: string;
+        large?: string;
         /** @example https://lain.bgm.tv/pic/cover/c/c2/0a/12_24O6L.jpg */
-        common: string;
+        common?: string;
         /** @example https://lain.bgm.tv/pic/cover/m/c2/0a/12_24O6L.jpg */
-        medium: string;
+        medium?: string;
         /** @example https://lain.bgm.tv/pic/cover/s/c2/0a/12_24O6L.jpg */
-        small: string;
+        small?: string;
         /** @example https://lain.bgm.tv/pic/cover/g/c2/0a/12_24O6L.jpg */
-        grid: string;
+        grid?: string;
       };
       /**
        * @description 话数
        * @example 27
        */
-      eps: number;
+      eps?: number;
       /**
        * @description 话数
        * @example 27
        */
-      eps_count: number;
+      eps_count?: number;
       /** @description 评分 */
-      rating: {
+      rating?: {
         /**
          * @description 总评分人数
          * @example 2289
          */
-        total: number;
+        total?: number;
         /** @description 各分值评分人数 */
-        count: {
+        count?: {
           /** @example 5 */
-          "1": number;
+          "1"?: number;
           /** @example 3 */
-          "2": number;
+          "2"?: number;
           /** @example 4 */
-          "3": number;
+          "3"?: number;
           /** @example 6 */
-          "4": number;
+          "4"?: number;
           /** @example 46 */
-          "5": number;
+          "5"?: number;
           /** @example 267 */
-          "6": number;
+          "6"?: number;
           /** @example 659 */
-          "7": number;
+          "7"?: number;
           /** @example 885 */
-          "8": number;
+          "8"?: number;
           /** @example 284 */
-          "9": number;
+          "9"?: number;
           /** @example 130 */
-          "10": number;
+          "10"?: number;
         };
         /**
          * @description 评分
          * @example 7.6
          */
-        score: number;
+        score?: number;
       };
       /**
        * @description 排名
        * @example 573
        */
-      rank: number;
+      rank?: number;
       /** @description 收藏人数 */
-      collection: {
+      collection?: {
         /**
          * @description 想做
          * @example 608
          */
-        wish: number;
+        wish?: number;
         /**
          * @description 做过
          * @example 3010
          */
-        collect: number;
+        collect?: number;
         /**
          * @description 在做
          * @example 103
          */
-        doing: number;
+        doing?: number;
         /**
          * @description 搁置
          * @example 284
          */
-        on_hold: number;
+        on_hold?: number;
         /**
          * @description 抛弃
          * @example 86
          */
-        dropped: number;
+        dropped?: number;
       };
     };
     Legacy_SubjectMedium: components["schemas"]["Legacy_SubjectSmall"] & {
       /** @description 角色信息 */
-      crt: (components["schemas"]["Legacy_Character"] & {
+      crt?: (components["schemas"]["Legacy_Character"] & {
         /**
          * @description 角色类型
          * @example 主角
          */
-        role_name: string;
+        role_name?: string;
       })[];
       /** @description 制作人员信息 */
-      staff: (components["schemas"]["Legacy_Person"] & {
+      staff?: (components["schemas"]["Legacy_Person"] & {
         /**
          * @description 人物类型
          * @example 主角
          */
-        role_name: string;
+        role_name?: string;
         /** @description 职位 */
-        jobs: string[];
+        jobs?: string[];
       })[];
     };
     Legacy_SubjectLarge: components["schemas"]["Legacy_SubjectMedium"] & {
       /** @description 章节列表 */
-      eps: components["schemas"]["Legacy_Episode"][];
+      eps?: components["schemas"]["Legacy_Episode"][];
       /** @description 讨论版 */
-      topic: components["schemas"]["Legacy_Topic"][];
+      topic?: components["schemas"]["Legacy_Topic"][];
       /** @description 评论日志 */
-      blog: components["schemas"]["Legacy_Blog"][];
+      blog?: components["schemas"]["Legacy_Blog"][];
     };
     /**
      * @description 章节类型 <br> 0 = 本篇 <br> 1 = 特别篇 <br> 2 = OP <br> 3 = ED <br> 4 = 预告/宣传/广告 <br> 5 = MAD <br> 6 = 其他
@@ -355,95 +355,95 @@ export interface components {
        * @description 章节 ID
        * @example 1027
        */
-      id: number;
+      id?: number;
       /**
        * @description 章节地址
        * @example https://bgm.tv/ep/1027
        */
-      url: string;
-      type: components["schemas"]["Legacy_EpisodeType"];
+      url?: string;
+      type?: components["schemas"]["Legacy_EpisodeType"];
       /**
        * @description 集数
        * @example 1
        */
-      sort: number;
+      sort?: number;
       /**
        * @description 标题
        * @example ちぃ 目覚める
        */
-      name: string;
+      name?: string;
       /**
        * @description 简体中文标题
        * @example 叽，觉醒了
        */
-      name_cn: string;
+      name_cn?: string;
       /**
        * @description 时长
        * @example 24m
        */
-      duration: string;
+      duration?: string;
       /**
        * @description 放送日期
        * @example 2002-04-03
        */
-      airdate: string;
+      airdate?: string;
       /**
        * @description 回复数量
        * @example 9
        */
-      comment: number;
+      comment?: number;
       /** @description 简介 */
-      desc: string;
+      desc?: string;
       /**
        * @description 放送状态 <br> Air = 已放送 <br> Today = 正在放送 <br> NA = 未放送
        * @example Air
        * @enum {string}
        */
-      status: "Air" | "Today" | "NA";
+      status?: "Air" | "Today" | "NA";
     };
     /** @description 讨论版 */
     Legacy_Topic: {
       /** @description ID */
-      id: number;
+      id?: number;
       /** @description 地址 */
-      url: string;
+      url?: string;
       /** @description 标题 */
-      title: string;
+      title?: string;
       /** @description 所属对象（条目） ID */
-      main_id: number;
+      main_id?: number;
       /** @description 发布时间 */
-      timestamp: number;
+      timestamp?: number;
       /** @description 最后回复时间 */
-      lastpost: number;
+      lastpost?: number;
       /** @description 回复数 */
-      replies: number;
-      user: components["schemas"]["Legacy_User"];
+      replies?: number;
+      user?: components["schemas"]["Legacy_User"];
     };
     /** @description 日志 */
     Legacy_Blog: {
       /** @description ID */
-      id: number;
+      id?: number;
       /** @description 地址 */
-      url: string;
+      url?: string;
       /** @description 标题 */
-      title: string;
+      title?: string;
       /** @description 概览 */
-      summary: string;
+      summary?: string;
       /** @description 图片 */
-      image: string;
+      image?: string;
       /** @description 回复数 */
-      replies: number;
+      replies?: number;
       /**
        * @description 发布时间
        * @example 1357144903
        */
-      timestamp: number;
+      timestamp?: number;
       /**
        * @description 发布时间
        * @example 2013-1-2 16:41
        */
-      dateline: string;
-      user: components["schemas"]["Legacy_User"];
+      dateline?: string;
+      user?: components["schemas"]["Legacy_User"];
     };
     /** @description 用户信息 */
     Legacy_User: {
@@ -451,37 +451,37 @@ export interface components {
        * @description 用户 id
        * @example 1
        */
-      id: number;
+      id?: number;
       /**
        * @description 用户主页地址
        * @example https://bgm.tv/user/sai
        */
-      url: string;
+      url?: string;
       /**
        * @description 用户名
        * @example sai
        */
-      username: string;
+      username?: string;
       /**
        * @description 昵称
        * @example Sai
        */
-      nickname: string;
+      nickname?: string;
       /** @description 头像地址 */
-      avatar: {
+      avatar?: {
         /** @example https://lain.bgm.tv/pic/user/l/000/00/00/1.jpg?r=1391790456 */
-        large: string;
+        large?: string;
         /** @example https://lain.bgm.tv/pic/user/m/000/00/00/1.jpg?r=1391790456 */
-        medium: string;
+        medium?: string;
         /** @example https://lain.bgm.tv/pic/user/s/000/00/00/1.jpg?r=1391790456 */
-        small: string;
+        small?: string;
       };
       /**
        * @description 签名
        * @example Awesome!
        */
-      sign: string;
-      usergroup: components["schemas"]["Legacy_UserGroup"];
+      sign?: string;
+      usergroup?: components["schemas"]["Legacy_UserGroup"];
     };
     /**
      * @description 用户组 <br> 1 = 管理员 <br> 2 = Bangumi 管理猿 <br> 3 = 天窗管理猿 <br> 4 = 禁言用户 <br> 5 = 禁止访问用户 <br> 8 = 人物管理猿 <br> 9 = 维基条目管理猿 <br> 10 = 用户 <br> 11 = 维基人
@@ -491,42 +491,42 @@ export interface components {
     Legacy_UserGroup: 1 | 2 | 3 | 4 | 5 | 8 | 9 | 10 | 11;
     /** @description 现实人物 */
     Legacy_Person: components["schemas"]["Legacy_Mono"] & {
-      info: components["schemas"]["Legacy_MonoInfo"];
+      info?: components["schemas"]["Legacy_MonoInfo"];
     };
     /** @description 虚拟角色 */
     Legacy_Character: components["schemas"]["Legacy_Mono"] & {
-      info: components["schemas"]["Legacy_MonoInfo"];
+      info?: components["schemas"]["Legacy_MonoInfo"];
       /** @description 声优列表 */
-      actors: components["schemas"]["Legacy_MonoBase"][];
+      actors?: components["schemas"]["Legacy_MonoBase"][];
     };
     /** @description 人物（基础模型） */
     Legacy_MonoBase: {
       /** @description 人物 ID */
-      id: number;
+      id?: number;
       /** @description 人物地址 */
-      url: string;
+      url?: string;
       /** @description 姓名 */
-      name: string;
+      name?: string;
       /** @description 肖像 */
-      images: {
+      images?: {
         /** @example https://lain.bgm.tv/pic/crt/l/ce/65/32_crt_XMJOj.jpg */
-        large: string;
+        large?: string;
         /** @example https://lain.bgm.tv/pic/crt/m/ce/65/32_crt_XMJOj.jpg */
-        medium: string;
+        medium?: string;
         /** @example https://lain.bgm.tv/pic/crt/s/ce/65/32_crt_XMJOj.jpg */
-        small: string;
+        small?: string;
         /** @example https://lain.bgm.tv/pic/crt/g/ce/65/32_crt_XMJOj.jpg */
-        grid: string;
+        grid?: string;
       };
     };
     /** @description 人物 */
     Legacy_Mono: components["schemas"]["Legacy_MonoBase"] & {
       /** @description 简体中文名 */
-      name_cn: string;
+      name_cn?: string;
       /** @description 回复数量 */
-      comment: number;
+      comment?: number;
       /** @description 收藏人数 */
-      collects: number;
+      collects?: number;
     };
     /** @description 人物信息 */
     Legacy_MonoInfo: {
@@ -534,36 +534,36 @@ export interface components {
        * @description 生日
        * @example 4月13日
        */
-      birth: string;
+      birth?: string;
       /**
        * @description 身高
        * @example 152cm
        */
-      height: string;
+      height?: string;
       /**
        * @description 性别
        * @example 女
        */
-      gender: string;
+      gender?: string;
       /** @description 别名（另外添加出来的 key 为 0 开始的数字） */
-      alias: {
+      alias?: {
         /** @description 日文名 */
-        jp: string;
+        jp?: string;
         /** @description 纯假名 */
-        kana: string;
+        kana?: string;
         /** @description 昵称 */
-        nick: string;
+        nick?: string;
         /** @description 罗马字 */
-        romaji: string;
+        romaji?: string;
         /** @description 第二中文名 */
-        zh: string;
+        zh?: string;
       };
       /** @description 引用来源 */
-      source: string | string[];
+      source?: string | string[];
       /** @description 简体中文名 */
-      name_cn: string;
+      name_cn?: string;
       /** @description 声优 */
-      cv: string;
+      cv?: string;
     };
     /**
      * Subject ID
@@ -772,7 +772,7 @@ export interface components {
     /** PersonRevision */
     PersonRevision: components["schemas"]["Revision"] & {
       /** Data */
-      data: { [key: string]: components["schemas"]["PersonRevisionDataItem"] };
+      data?: { [key: string]: components["schemas"]["PersonRevisionDataItem"] };
     };
     /** PersonRevisionDataItem */
     PersonRevisionDataItem: {
@@ -788,28 +788,28 @@ export interface components {
     /** PersonRevisionProfession */
     PersonRevisionProfession: {
       /** Producer */
-      producer: string;
+      producer?: string;
       /** Mangaka */
-      mangaka: string;
+      mangaka?: string;
       /** Artist */
-      artist: string;
+      artist?: string;
       /** Seiyu */
-      seiyu: string;
+      seiyu?: string;
       /** Writer */
-      writer: string;
+      writer?: string;
       /** Illustrator */
-      illustrator: string;
+      illustrator?: string;
       /** Actor */
-      actor: string;
+      actor?: string;
     };
     /** RevisionExtra */
     RevisionExtra: {
       /** Image */
-      img: string;
+      img?: string;
     };
     /** SubjectRevision */
     SubjectRevision: components["schemas"]["Revision"] & {
-      data: components["schemas"]["SubjectRevisionData"];
+      data?: components["schemas"]["SubjectRevisionData"];
     };
     /** SubjectRevisionData */
     SubjectRevisionData: {
@@ -837,7 +837,7 @@ export interface components {
     /** CharacterRevision */
     CharacterRevision: components["schemas"]["Revision"] & {
       /** Data */
-      data: {
+      data?: {
         [key: string]: components["schemas"]["CharacterRevisionDataItem"];
       };
     };
@@ -978,9 +978,9 @@ export interface components {
         | string
         | {
             /** @description error message */
-            error: string;
+            error?: string;
             /** @description request path */
-            path: string;
+            path?: string;
           };
     };
     /** Images */
@@ -1060,9 +1060,9 @@ export interface components {
      */
     IndexBasicInfo: {
       /** Title */
-      title: string;
+      title?: string;
       /** Description */
-      description: string;
+      description?: string;
     };
     /**
      * IndexBasicInfo
@@ -1070,14 +1070,14 @@ export interface components {
      */
     IndexSubjectAddInfo: {
       /** Subject ID */
-      subject_id: number;
+      subject_id?: number;
       /**
        * Sort
        * @description 排序条件，越小越靠前
        */
-      sort: number;
+      sort?: number;
       /** Comment */
-      comment: string;
+      comment?: string;
     };
     /**
      * IndexBasicInfo
@@ -1088,9 +1088,9 @@ export interface components {
        * Sort
        * @description 排序条件，越小越靠前
        */
-      sort: number;
+      sort?: number;
       /** Comment */
-      comment: string;
+      comment?: string;
     };
     /**
      * Infobox
@@ -1193,22 +1193,22 @@ export interface components {
        * Total
        * @default 0
        */
-      total: number;
+      total?: number;
       /**
        * Limit
        * @default 0
        */
-      limit: number;
+      limit?: number;
       /**
        * Offset
        * @default 0
        */
-      offset: number;
+      offset?: number;
       /**
        * Data
        * @default []
        */
-      data: components["schemas"]["Episode"][];
+      data?: components["schemas"]["Episode"][];
     };
     /** Paged[IndexSubject] */
     Paged_IndexSubject: {
@@ -1216,22 +1216,22 @@ export interface components {
        * Total
        * @default 0
        */
-      total: number;
+      total?: number;
       /**
        * Limit
        * @default 0
        */
-      limit: number;
+      limit?: number;
       /**
        * Offset
        * @default 0
        */
-      offset: number;
+      offset?: number;
       /**
        * Data
        * @default []
        */
-      data: components["schemas"]["IndexSubject"][];
+      data?: components["schemas"]["IndexSubject"][];
     };
     /** Paged[Revision] */
     Paged_Revision: {
@@ -1239,22 +1239,22 @@ export interface components {
        * Total
        * @default 0
        */
-      total: number;
+      total?: number;
       /**
        * Limit
        * @default 0
        */
-      limit: number;
+      limit?: number;
       /**
        * Offset
        * @default 0
        */
-      offset: number;
+      offset?: number;
       /**
        * Data
        * @default []
        */
-      data: components["schemas"]["Revision"][];
+      data?: components["schemas"]["Revision"][];
     };
     /** Paged[UserCollection] */
     Paged_UserCollection: {
@@ -1262,22 +1262,22 @@ export interface components {
        * Total
        * @default 0
        */
-      total: number;
+      total?: number;
       /**
        * Limit
        * @default 0
        */
-      limit: number;
+      limit?: number;
       /**
        * Offset
        * @default 0
        */
-      offset: number;
+      offset?: number;
       /**
        * Data
        * @default []
        */
-      data: components["schemas"]["UserSubjectCollection"][];
+      data?: components["schemas"]["UserSubjectCollection"][];
     };
     /** Person */
     Person: {
@@ -1516,16 +1516,16 @@ export interface components {
         total: number;
         /** Count */
         count: {
-          "1": number;
-          "2": number;
-          "3": number;
-          "4": number;
-          "5": number;
-          "6": number;
-          "7": number;
-          "8": number;
-          "9": number;
-          "10": number;
+          "1"?: number;
+          "2"?: number;
+          "3"?: number;
+          "4"?: number;
+          "5"?: number;
+          "6"?: number;
+          "7"?: number;
+          "8"?: number;
+          "9"?: number;
+          "10"?: number;
         };
         /** Score */
         score: number;
@@ -1748,17 +1748,17 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            weekday: {
+            weekday?: {
               /** @example Mon */
-              en: string;
+              en?: string;
               /** @example 星期一 */
-              cn: string;
+              cn?: string;
               /** @example 月耀日 */
-              ja: string;
+              ja?: string;
               /** @example 1 */
-              id: number;
+              id?: number;
             };
-            items: components["schemas"]["Legacy_SubjectSmall"][];
+            items?: components["schemas"]["Legacy_SubjectSmall"][];
           }[];
         };
       };
@@ -1788,21 +1788,21 @@ export interface operations {
           "application/json":
             | {
                 /** @description 总条数 */
-                results: number;
+                results?: number;
                 /** @description 结果列表 */
-                list: components["schemas"]["Legacy_SubjectSmall"][];
+                list?: components["schemas"]["Legacy_SubjectSmall"][];
               }
             | {
                 /** @description 总条数 */
-                results: number;
+                results?: number;
                 /** @description 结果列表 */
-                list: components["schemas"]["Legacy_SubjectMedium"][];
+                list?: components["schemas"]["Legacy_SubjectMedium"][];
               }
             | {
                 /** @description 总条数 */
-                results: number;
+                results?: number;
                 /** @description 结果列表 */
-                list: components["schemas"]["Legacy_SubjectLarge"][];
+                list?: components["schemas"]["Legacy_SubjectLarge"][];
               };
         };
       };
@@ -1844,18 +1844,18 @@ export interface operations {
              * @description 搜索结果数量
              * @example 100
              */
-            total: number;
+            total?: number;
             /**
              * @description 当前分页参数
              * @example 100
              */
-            limit: number;
+            limit?: number;
             /**
              * @description 当前分页参数
              * @example 100
              */
-            offset: number;
-            data: {
+            offset?: number;
+            data?: {
               /**
                * @description 条目ID
                * @example 8
@@ -1905,7 +1905,7 @@ export interface operations {
           /** @description 不同条件之间是 `且` 的关系 */
           filter?: {
             /** @description 条目类型，参照 `SubjectType` enum，多值之间为 `或` 的关系。 */
-            type: components["schemas"]["SubjectType"][];
+            type?: components["schemas"]["SubjectType"][];
             /**
              * @description 标签，可以多次出现。多值之间为 `且` 关系。
              * @example [
@@ -1913,7 +1913,7 @@ export interface operations {
              *   "原创"
              * ]
              */
-            tag: string[];
+            tag?: string[];
             /**
              * @description 播出日期/发售日期，日期必需为 `YYYY-MM-DD` 格式。多值之间为 `且` 关系。
              * @example [
@@ -1921,7 +1921,7 @@ export interface operations {
              *   "<2020-10-01"
              * ]
              */
-            air_date: string[];
+            air_date?: string[];
             /**
              * @description 用于搜索指定评分的条目，多值之间为 `且` 关系。
              * @example [
@@ -1929,7 +1929,7 @@ export interface operations {
              *   "<8"
              * ]
              */
-            rating: string[];
+            rating?: string[];
             /**
              * @description 用于搜索指定排名的条目，多值之间为 `且` 关系。
              * @example [
@@ -1937,7 +1937,7 @@ export interface operations {
              *   "<=18"
              * ]
              */
-            rank: string[];
+            rank?: string[];
             /**
              * @description 无权限的用户会直接忽略此字段，不会返回R18条目。
              *
@@ -1947,7 +1947,7 @@ export interface operations {
              *
              * `false` 只会返回非 R18 条目。
              */
-            nsfw: boolean;
+            nsfw?: boolean;
           };
         };
       };
@@ -2575,22 +2575,22 @@ export interface operations {
       content: {
         "application/json": {
           /** @description 修改条目收藏类型 */
-          type: components["schemas"]["SubjectCollectionType"];
+          type?: components["schemas"]["SubjectCollectionType"];
           /** @description 评分，`0` 表示删除评分 */
-          rate: number;
+          rate?: number;
           /** @description 只能用于修改书籍条目进度 */
-          ep_status: number;
+          ep_status?: number;
           /** @description 只能用于修改书籍条目进度 */
-          vol_status: number;
+          vol_status?: number;
           /** @description 评价 */
-          comment: string;
+          comment?: string;
           /** @description 仅自己可见 */
-          private: boolean;
+          private?: boolean;
           /**
            * 标签
            * @description 不传或者 `null` 都会被忽略，传 `[]` 则会删除所有 tag。
            */
-          tags: string[];
+          tags?: string[];
         };
       };
     };
@@ -2615,7 +2615,7 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Page"] & {
-            data: components["schemas"]["UserEpisodeCollection"][];
+            data?: components["schemas"]["UserEpisodeCollection"][];
           };
         };
       };

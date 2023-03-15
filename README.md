@@ -32,7 +32,7 @@ import {
 
   // 下面是请求参数类型
   BGMSubjectParams,
-  BGMpisodeParams,
+  BGMEpisodeParams,
   BGMCharacterParams,
   BGMPersonParams,
   BGMUserParams,
@@ -40,6 +40,11 @@ import {
   BGMEditHistoryParams,
   BGMCategoryParams, // 别名 BGMIndicesParams
   BGMSearchParams,
+
+  // 工具泛型, 用于获取请求类型中不同类型的参数
+  Path, // 获取 Path 参数
+  Query, // 获取 Query 参数
+  RequestBody, // 获取 RequestBody 参数
 } from 'bgm-types';
 ```
 
@@ -61,6 +66,21 @@ import type { BGMUser } from 'bgm-types';
     console.log(data[i].subject.name);
   }
 })();
+
+// 关于请求参数类型的使用, 以 search api, axios 请求为例
+const search = (
+  keywords: Path<BGMSearchParams.Search>,
+  params?: Query<BGMSearchParams.Search>
+) => {
+  const url = encodeURI(`/search/subject/${keywords}`);
+  return axios.get<BGMSearch.Search>(url, {
+    params,
+  });
+}
+// 其中 keywords 是路径参数
+// 使用类型 BGMSearchParams.Search['path']['keywords']
+// 或 Path 泛型 Path<BGMSearchParams.Search>
+// params 同理
 ```
 
 ## Thanks

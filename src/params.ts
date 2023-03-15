@@ -2,8 +2,10 @@ import { paths } from './types';
 
 /** 条目 */
 export namespace BGMSubjectParams {
+  /* ============ S - Search ============ */
   type SearchRequestBody =
     paths['/v0/search/subjects']['post']['requestBody']['content']['application/json'];
+
   type SearchQuery = paths['/v0/search/subjects']['post']['parameters']['query'];
 
   /** 实验性 API， 随时可能发生改动 */
@@ -11,6 +13,7 @@ export namespace BGMSubjectParams {
     query: SearchQuery;
     requestBody: SearchRequestBody;
   };
+  /* ============ E - Search ============ */
 
   export type Information = paths['/v0/subjects/{subject_id}']['get']['parameters'];
 
@@ -25,7 +28,7 @@ export namespace BGMSubjectParams {
 }
 
 /** 章节 */
-export namespace BGMpisodeParams {
+export namespace BGMEpisodeParams {
   export type Episodes = paths['/v0/episodes']['get']['parameters'];
 
   export type EpisodeItem = paths['/v0/episodes/{episode_id}']['get']['parameters'];
@@ -81,7 +84,7 @@ export namespace BGMCollectionParams {
 
   export type PatchSubject = {
     path: PatchSubjectPath;
-    requestBody?: PatchSubjectRequestBody;
+    requestBody: PatchSubjectRequestBody;
   };
 
   /* ============ E - PatchSubject ============ */
@@ -94,7 +97,7 @@ export namespace BGMCollectionParams {
     paths['/v0/users/-/collections/{subject_id}/episodes']['patch']['parameters']['path'];
 
   type PatchEpisodesInSubjectRequestBody =
-    paths['/v0/users/-/collections/{subject_id}/episodes']['patch']['requestBody'];
+    paths['/v0/users/-/collections/{subject_id}/episodes']['patch']['requestBody']['content']['application/json'];
 
   export type PatchEpisodesInSubject = {
     path: PatchEpisodesInSubjectPath;
@@ -189,9 +192,19 @@ export namespace BGMCategoryParams {
   export type DeleteSubject =
     paths['/v0/indices/{index_id}/subjects/{subject_id}']['delete']['parameters'];
 }
-export { BGMCategoryParams as BGMIndicesParams };
+export type { BGMCategoryParams as BGMIndicesParams };
 
 /** 搜索 */
 export namespace BGMSearchParams {
   export type Search = paths['/search/subject/{keywords}']['get']['parameters'];
 }
+
+type BGMParams = {
+  path?: any;
+  query?: any;
+  requestBody?: any;
+};
+
+export type Path<T extends BGMParams> = T['path'][keyof T['path']];
+export type Query<T extends BGMParams> = T['query'];
+export type RequestBody<T extends BGMParams> = T['requestBody'];
