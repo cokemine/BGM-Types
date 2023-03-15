@@ -192,7 +192,7 @@ export namespace BGMCategoryParams {
   export type DeleteSubject =
     paths['/v0/indices/{index_id}/subjects/{subject_id}']['delete']['parameters'];
 }
-export { BGMCategoryParams as BGMIndicesParams };
+export type { BGMCategoryParams as BGMIndicesParams };
 
 /** 搜索 */
 export namespace BGMSearchParams {
