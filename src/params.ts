@@ -191,6 +191,11 @@ export namespace BGMCategoryParams {
 
   export type DeleteSubject =
     paths['/v0/indices/{index_id}/subjects/{subject_id}']['delete']['parameters'];
+
+  export type Collect = paths['/v0/indices/{index_id}/collect']['post']['parameters'];
+
+  export type DeleteCollect =
+    paths['/v0/indices/{index_id}/collect']['delete']['parameters'];
 }
 export type { BGMCategoryParams as BGMIndicesParams };
 
