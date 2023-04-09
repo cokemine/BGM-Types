@@ -101,7 +101,7 @@ export interface paths {
   };
   "/v0/users/-/collections/{subject_id}": {
     /**
-     * 修改条目收藏状态，暂时不会生成时间线。
+     * 修改条目收藏状态
      *
      * 由于直接修改剧集条目的完成度可能会引起意料之外效果，只能用于修改书籍类条目的完成度。
      *
@@ -111,11 +111,7 @@ export interface paths {
   };
   "/v0/users/-/collections/{subject_id}/episodes": {
     get: operations["getUserSubjectEpisodeCollection"];
-    /**
-     * 同时会重新计算条目的完成度
-     *
-     * 暂时不能生成时间线
-     */
+    /** 同时会重新计算条目的完成度 */
     patch: operations["patchUserSubjectEpisodeCollection"];
   };
   "/v0/users/-/collections/-/episodes/{episode_id}": {
@@ -161,6 +157,12 @@ export interface paths {
     /** 如果条目不存在于目录，会创建该条目 */
     put: operations["editIndexSubjectsByIndexIdAndSubjectID"];
     delete: operations["delelteSubjectFromIndexByIndexIdAndSubjectID"];
+  };
+  "/v0/indices/{index_id}/collect": {
+    /** 为当前用户收藏一条目录 */
+    post: operations["collectIndexByIndexIdAndUserId"];
+    /** 为当前用户取消收藏一条目录 */
+    delete: operations["uncollectIndexByIndexIdAndUserId"];
   };
 }
 
@@ -1714,6 +1716,12 @@ export interface components {
         "application/json": components["schemas"]["ErrorDetail"];
       };
     };
+    /** Internal Server Error */
+    500: {
+      content: {
+        "application/json": components["schemas"]["ErrorDetail"];
+      };
+    };
     /** Successful Response */
     "200-no-content": unknown;
   };
@@ -2536,7 +2544,7 @@ export interface operations {
     };
   };
   /**
-   * 修改条目收藏状态，暂时不会生成时间线。
+   * 修改条目收藏状态
    *
    * 由于直接修改剧集条目的完成度可能会引起意料之外效果，只能用于修改书籍类条目的完成度。
    *
@@ -2639,11 +2647,7 @@ export interface operations {
       };
     };
   };
-  /**
-   * 同时会重新计算条目的完成度
-   *
-   * 暂时不能生成时间线
-   */
+  /** 同时会重新计算条目的完成度 */
   patchUserSubjectEpisodeCollection: {
     parameters: {
       path: {
@@ -3109,6 +3113,36 @@ export interface operations {
       200: components["responses"]["200-no-content"];
       401: components["responses"]["401"];
       404: components["responses"]["404"];
+    };
+  };
+  /** 为当前用户收藏一条目录 */
+  collectIndexByIndexIdAndUserId: {
+    parameters: {
+      path: {
+        /** 目录 ID */
+        index_id: components["parameters"]["path_index_id"];
+      };
+    };
+    responses: {
+      200: components["responses"]["200-no-content"];
+      401: components["responses"]["401"];
+      404: components["responses"]["404"];
+      500: components["responses"]["500"];
+    };
+  };
+  /** 为当前用户取消收藏一条目录 */
+  uncollectIndexByIndexIdAndUserId: {
+    parameters: {
+      path: {
+        /** 目录 ID */
+        index_id: components["parameters"]["path_index_id"];
+      };
+    };
+    responses: {
+      200: components["responses"]["200-no-content"];
+      401: components["responses"]["401"];
+      404: components["responses"]["404"];
+      500: components["responses"]["500"];
     };
   };
 }

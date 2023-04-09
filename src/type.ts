@@ -119,6 +119,15 @@ export namespace BGMCategory {
 
   export type Edit =
     paths['/v0/indices/{index_id}']['put']['responses']['200']['content']['application/json'];
+
+  export type DeleteSubject =
+    paths['/v0/indices/{index_id}/subjects/{subject_id}']['delete']['responses']['200'];
+
+  export type Collect =
+    paths['/v0/indices/{index_id}/collect']['post']['responses']['200'];
+
+  export type DeleteCollect =
+    paths['/v0/indices/{index_id}/collect']['delete']['responses']['200'];
 }
 
 export type { BGMCategory as BGMIndices };
