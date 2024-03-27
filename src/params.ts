@@ -1,4 +1,4 @@
-import { paths } from './types';
+import type { paths } from './types';
 
 /** 条目 */
 export namespace BGMSubjectParams {
